@@ -1,0 +1,44 @@
+body {
+  margin:0;
+  padding:0;
+}
+
+#map {
+  margin: 0;
+  top:0;
+  bottom:0;
+  height:Calc(100vh - 42px); 
+  width:100vw;
+}
+
+#floatingRectangle {
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  height: 100px;
+  background-color: #000;
+  color: white;
+  padding: 0;
+  text-align:center;
+}
+
+#output {
+  position: absolute
+  left: 0;
+  right: 0;
+  align: center;
+}
+
+#navbar {
+  margin: 0;
+}
+
+#title {
+  height: 42px
+}
+
+#logout {
+  margin-bottom: 0;
+}

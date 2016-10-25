@@ -66,7 +66,7 @@ module.exports = function(app, passport) {
 	// MAIN MAP =========================
 	// =====================================
 app.get('/mainmap', isLoggedIn, function(req, res) {
-	res.render('leaflet.ejs', {
+	res.render('mainmap.ejs', {
 		user : req.user
 	});
 });

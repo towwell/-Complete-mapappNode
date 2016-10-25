@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>Main Map</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+  <!-- jquery -->
+  <script src="/javascripts/jquery-3.1.1.slim.min.js"></script>
+
+  <!-- mapbox gl -->
+  <script src='/javascripts/mapbox-gl.js'></script>
+  <link  rel='stylesheet' href='/stylesheets/mapbox-gl.css'/>
+
+  <!-- leaflet -->
+  <link rel="stylesheet" href="/stylesheets/leaflet.css"/>
+  <script src="/javascripts/leaflet.js"></script>
+
+  <!-- leaflet draw -->
+  <link rel="stylesheet" href="/stylesheets/leaflet.draw.css" />
+	<script src="/javascripts/leaflet.draw.js"></script>
+
+  <!-- html style -->
+  <link rel="stylesheet" href="/stylesheets/mainmap.css"/>
+
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/stylesheets/superhero-bootstrap.min.css"/>
+	<script src="/javascripts/bootstrap.min.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-default" id="navbar">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand btn-info" href="/mainmap" id="title"><b>Leaflet Map</b></a>
+      </div>
+
+      <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
+        <ul class="nav navbar-nav">
+          <!-- <li class="active"><a href="/mainmap">Main Map<span class="sr-only">(current)</span></a></li> -->
+          <li><label class="btn btn-success" style="height: 42px;">Upload<input style="display: none;" type='file' accept='Json' onchange='loadFile(event)'></label></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" id="logout">
+          <li><a href="/logout" class="btn btn-danger">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div id='map'>
+  </div>
+
+  <!-- Init map JS last after "map" div -->
+  <script src="/javascripts/mainmap.js"></script>
+
+</body>
+</html>
