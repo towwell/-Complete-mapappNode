@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="/stylesheets/login.css"/>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/stylesheets/superhero-bootstrap.min.css"/>
+    <script src="/javascripts/jquery-3.1.1.slim.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; height:830px; width:100%; }
+		#floatingRectangle {
+			z-index: 1;
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 20px;
+			height: 100px;
+			background-color: #000;
+			color: white;
+			padding: 0;
+			text-align:center;
+		}
+		#output {
+			position: absolute
+			left: 0;
+			right: 0;
+			align: center;
+		}
+    </style>
+</head>
+<body>
+<div id='map'>
+</div>
+<div id="floatingRectangle">A Mapbox map made with Leaflet. Made by Fanzy</br></br> Current features:</br> Ability to add custom points with markers</br>
+<input type='file' accept='Json' onchange='loadFile(event)'>
+</br>
+<img id='output'>
+<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+</div>
+
+<script>
+
+//FileReader that reads GeoJSON to display onto map
+//
+var loadFile = function(event) {
+// Init
+var input = event.target;
+var reader = new FileReader();
+
+// Read the file
+reader.readAsText(input.files[0]);
+
+// Invoked when file is loading.
+reader.onload = function(){
+
+    // parse file to JSON object
+    var jsonObject = reader.result;
+    var json = JSON.parse(jsonObject);
+    jsonlayer = L.geoJson(json, {
+onEachFeature: function (feature, layer) {
+  layer.bindPopup(feature.properties.name);
+}}).addTo(map);
+    console.log(jsonObject);
+
+};
+};
+	// For image reading
+	//
+	//reader.onload = function(){
+	//var dataURL = reader.result;
+	//var output = document.getElementById('output');
+	//output.src = dataURL;
+	//};
+	//reader.readAsDataURL(input.files[0]);
+	//};
+
+//Basemap initialization
+var mapboxAttribution = 'Using Mapbox'
+var myurl = 'https://api.mapbox.com/styles/v1/towwell/ciugfz4qs00ix2is1aej7h4mh/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidG93d2VsbCIsImEiOiJjaXVnZndjdnkwMDRsMnRveWR4OGdibmdqIn0.053ocWE7UF4hdJuc1PN9ew';
+var myurl2 = 'https://api.mapbox.com/styles/v1/towwell/ciughc16p002p2jqwv4nxojej/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidG93d2VsbCIsImEiOiJjaXVnZndjdnkwMDRsMnRveWR4OGdibmdqIn0.053ocWE7UF4hdJuc1PN9ew'
+var grayscale = L.tileLayer(myurl, {id: 'mapbox://styles/towwell/ciugfz4qs00ix2is1aej7h4mh', attribution: mapboxAttribution}),
+    streets   = L.tileLayer(myurl2, {id: 'mapbox://styles/towwell/ciughc16p002p2jqwv4nxojej', attribution: mapboxAttribution});
+
+	var map = L.map('map', {
+    center: [1.352648, 103.810827],
+    zoom: 12,
+    layers: [grayscale]
+});
+
+var i = '1'
+//Custom markers with popup and added to layer control
+function onMapClick(e) {
+	var markeri = i.toString()
+	var numberi = i.toString()
+	markeri = L.marker([e.latlng.lat , e.latlng.lng]).addTo(map)
+	markeri.bindPopup("<b>Custom Point "+ numberi + "</b></br><b>Latitude:</b> " + e.latlng.lat.toString() + "</br><b>Longitude: </b>" + e.latlng.lng.toString() + "</br> Using <b>WGS84</b> as CRS")
+	var points = L.layerGroup([markeri]);
+	var overlayMaps = {
+	"Points": points
+}
+	lcontrol.addOverlay(points, "Custom Point " + numberi)
+	i++
+}
+
+//Basemap configs
+var baseMaps = {
+    "Grayscale": grayscale,
+    "Streets": streets
+};
+//First load of layer control
+lcontrol = L.control.layers(baseMaps).addTo(map);
+map.on('click', onMapClick);
+	</script>
+
+</body>
+</html>
