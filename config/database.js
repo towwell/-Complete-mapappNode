@@ -1,10 +1,10 @@
 // config/database.js
 module.exports = {
     'connection': {
-        'host': 'localhost',
+        'host': '188.166.244.116',
         'user': 'root',
         'password': 'password'
     },
-	'database': 'my_schema',
+	'database': 'mapApp',
     'users_table': 'users'
 };
