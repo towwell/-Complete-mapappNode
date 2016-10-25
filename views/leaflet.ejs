@@ -6,13 +6,11 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="/stylesheets/login.css"/>
-    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/stylesheets/superhero-bootstrap.min.css"/>
-    <script src="/javascripts/jquery-3.1.1.slim.min.js"></script>
-    <script src="/javascripts/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+	
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-draw@0.4.1/dist/leaflet.draw.css" />
+	<script src="https://unpkg.com/leaflet-draw@0.4.1/dist/leaflet.draw.js"></script>
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; height:830px; width:100%; }
@@ -43,7 +41,6 @@
 <input type='file' accept='Json' onchange='loadFile(event)'>
 </br>
 <img id='output'>
-<a href="/logout" class="btn btn-default btn-sm">Logout</a>
 </div>
 
 <script>
@@ -58,7 +55,7 @@ var reader = new FileReader();
 // Read the file
 reader.readAsText(input.files[0]);
 
-// Invoked when file is loading.
+// Invoked when file is loading. 
 reader.onload = function(){
 
     // parse file to JSON object
@@ -94,21 +91,37 @@ var grayscale = L.tileLayer(myurl, {id: 'mapbox://styles/towwell/ciugfz4qs00ix2i
     zoom: 12,
     layers: [grayscale]
 });
+//Drawn items layer init
+var drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
 
-var i = '1'
-//Custom markers with popup and added to layer control
-function onMapClick(e) {
-	var markeri = i.toString()
-	var numberi = i.toString()
-	markeri = L.marker([e.latlng.lat , e.latlng.lng]).addTo(map)
-	markeri.bindPopup("<b>Custom Point "+ numberi + "</b></br><b>Latitude:</b> " + e.latlng.lat.toString() + "</br><b>Longitude: </b>" + e.latlng.lng.toString() + "</br> Using <b>WGS84</b> as CRS")
-	var points = L.layerGroup([markeri]);
-	var overlayMaps = {
-	"Points": points
-}
-	lcontrol.addOverlay(points, "Custom Point " + numberi)
-	i++
-}
+var drawControl = new L.Control.Draw({
+    edit: {
+        featureGroup: drawnItems
+    }
+});
+map.addControl(drawControl);
+
+//What happens when custom point created
+map.on('draw:created', function (e) {
+    var type = e.layerType,
+        layer = e.layer;
+
+    if (type === 'marker') {
+        // Do marker specific actions
+    }
+
+    // Do whatever else you need to. (save to db, add to map etc)
+    map.addLayer(layer);
+});
+
+//What happens when custom point edited
+map.on('draw:edited', function (e) {
+    var layers = e.layers;
+    layers.eachLayer(function (layer) {
+        //do whatever you want, most likely save back to db
+    });
+});
 
 //Basemap configs
 var baseMaps = {
