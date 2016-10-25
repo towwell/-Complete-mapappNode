@@ -37,7 +37,7 @@
 <body>
 <div id='map'>
 </div>
-<div id="floatingRectangle">A Mapbox map made with Leaflet. Made by Fanzy</br></br> Current features:</br> Ability to add custom points with markers</br>
+<div id="floatingRectangle">A Mapbox map made with Leaflet. Made by Fanzy</br>Current features:</br> Ability to add custom points with markers</br>
 <input type='file' accept='Json' onchange='loadFile(event)'>
 </br>
 <img id='output'>
@@ -108,6 +108,7 @@ map.on('draw:created', function (e) {
         layer = e.layer;
 
     if (type === 'marker') {
+	layer.addTo(drawnItems)
         // Do marker specific actions
     }
 
@@ -128,8 +129,13 @@ var baseMaps = {
     "Grayscale": grayscale,
     "Streets": streets
 };
+
+//Overlay map configs
+var overlayMaps = {
+	"drawnItems": drawnItems
+};
 //First load of layer control
-lcontrol = L.control.layers(baseMaps).addTo(map);
+lcontrol = L.control.layers(baseMaps, overlayMaps).addTo(map);
 map.on('click', onMapClick);
 	</script>
 
