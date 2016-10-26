@@ -50,7 +50,8 @@
         </ul>
         <!-- Logout button, modal trigger -->
         <ul class="nav navbar-nav navbar-right" id="logout">
-          <li><a class="btn btn-danger" data-target="#logoutModal"  data-toggle="modal"><i class="material-icons">power_settings_new</i></a></li>
+          <li><a class="btn btn-default" id="navbarRight">Welcome back, <b><%= user.username %></b></a></li>
+          <li><a class="btn btn-danger" data-target="#logoutModal"  data-toggle="modal" id="navbarRight"><i class="material-icons">power_settings_new</i></a></li>
         </ul>
         <!-- Hidden modal -->
         <div class="modal fade" id="logoutModal">
