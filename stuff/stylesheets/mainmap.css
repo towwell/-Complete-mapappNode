@@ -7,7 +7,7 @@ body {
   margin: 0;
   top:0;
   bottom:0;
-  height:Calc(100vh - 42px); 
+  height:Calc(100vh - 42px);
   width:100vw;
 }
 
@@ -40,5 +40,9 @@ body {
 }
 
 #logout {
-  margin-bottom: 0;
+  height: 42px;
+}
+
+#modalBody {
+  
 }

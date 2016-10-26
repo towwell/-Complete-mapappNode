@@ -27,10 +27,13 @@
   <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
 	<link rel="stylesheet" href="/stylesheets/superhero-bootstrap.min.css"/>
 	<script src="/javascripts/bootstrap.min.js"></script>
+
+  <!-- Material Icon -->
+  <link rel="stylesheet" href="/stylesheets/icon.css"/>
 </head>
 <body>
   <nav class="navbar navbar-default" id="navbar">
-    <div class="container-fluid">
+    <div class="container-fluid" style="padding-right: 0;">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
@@ -43,12 +46,30 @@
 
       <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
         <ul class="nav navbar-nav">
-          <!-- <li class="active"><a href="/mainmap">Main Map<span class="sr-only">(current)</span></a></li> -->
           <li><label class="btn btn-success" style="height: 42px;">Upload<input style="display: none;" type='file' accept='Json' onchange='loadFile(event)'></label></li>
         </ul>
+        <!-- Logout button, modal trigger -->
         <ul class="nav navbar-nav navbar-right" id="logout">
-          <li><a href="/logout" class="btn btn-danger">Logout</a></li>
+          <li><a class="btn btn-danger" data-target="#logoutModal"  data-toggle="modal"><i class="material-icons">power_settings_new</i></a></li>
         </ul>
+        <!-- Hidden modal -->
+        <div class="modal fade" id="logoutModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Logout?</h4>
+              </div>
+              <div class="modal-body" id="modalbody">
+                <h4>You are about to logout, are you sure?</h4>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a type="button" class="btn btn-primary" href="/logout">Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
