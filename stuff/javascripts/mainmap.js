@@ -89,26 +89,3 @@
   };
   //First load of layer control
   lcontrol = L.control.layers(baseMaps, overlayMaps).addTo(map);
-
-  //Upload to database
-  //
-  function uploadtoDB(){
-      retrieveActiveLayer()
-
-      $.ajax({
-    url: someURL,
-    type: 'POST',
-    data: JSON.stringify(drawnItemsJson),
-    contentType: 'application/json',
-    dataType: 'json',
-    success: function(data, status, xhr)
-    {
-       // ...
-    }
-});
-  }
-  //Retrieve specific layers
-  //
-  function retrieveActiveLayer(){
-      var drawnItemsJson = drawnItems.toGeoJSON();
-  }
