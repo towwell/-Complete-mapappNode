@@ -3,6 +3,11 @@ body {
   padding:0;
 }
 
+#navbarItemGap {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 #map {
   margin: 0;
   top:0;

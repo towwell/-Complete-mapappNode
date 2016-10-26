@@ -45,83 +45,78 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand btn-info" href="/mainmap" id="title"><b>Leaflet Map</b></a>
+        <a class="navbar-brand center" id="title"><b>Leaflet Map</b></a>
       </div>
-
       <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
-
       <!-- align left buttons -->
-        <!-- Upload button, modal trigger -->
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav" id="navbarItemGap">
+          <!-- Upload button, modal trigger -->
           <li><a class="btn btn-success" data-target="#uploadModal"  data-toggle="modal" id="navbarRight">Upload</a></li>
-        </ul>
-        <!-- Hidden modal -->
-        <div class="modal fade" id="uploadModal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Upload a data file</h4>
-              </div>
-              <div class="modal-body" id="modalbody">
-                <h5>Upload a data file in <b>GeoJSON</b> format to display on the map</h5>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <label class="btn btn-success" style="height: 42px;">Select File<input style="display: none;" type='file' accept='Json' onchange='loadFile(event)'></label>
+          <!-- Hidden modal -->
+          <div class="modal fade" id="uploadModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Upload a data file</h4>
+                </div>
+                <div class="modal-body" id="modalbody">
+                  <h5>Upload a data file in <b>GeoJSON</b> format to display on the map</h5>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <label class="btn btn-success" style="height: 42px;">Select File<input style="display: none;" type='file' accept='Json' onchange='loadFile(event)'></label>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <!-- Upload button, modal trigger -->
-        <ul class="nav navbar-nav">
+          <!-- Upload button, modal trigger -->
           <li><a class="btn btn-primary" data-target="#uploadDBModal"  data-toggle="modal" id="navbarRight">Save Layer</a></li>
-        </ul>
-        <!-- Hidden modal -->
-        <div class="modal fade" id="uploadDBModal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Save layer</h4>
-              </div>
-              <div class="modal-body" id="modalbody">
-                <h5>Save your custom data layer into the database</h5>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" onclick="uploadtoDB()">Upload</a>
+          <!-- Hidden modal -->
+          <div class="modal fade" id="uploadDBModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Save layer</h4>
+                </div>
+                <div class="modal-body" id="modalbody">
+                  <h5>Save your custom data layer into the database</h5>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <a class="btn btn-primary" onclick="uploadtoDB()">Upload</a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </ul>
       <!-- align right buttons -->
-        <!-- Logout button, modal trigger -->
         <ul class="nav navbar-nav navbar-right" id="logout">
           <li><a class="btn btn-default" id="navbarRight">Welcome back, <b><%= user.username %></b></a></li>
+          <!-- Logout button, modal trigger -->
           <li><a class="btn btn-danger" data-target="#logoutModal"  data-toggle="modal" id="navbarRight"><i class="material-icons">power_settings_new</i></a></li>
-        </ul>
-        <!-- Hidden modal -->
-        <div class="modal fade" id="logoutModal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Logout?</h4>
-              </div>
-              <div class="modal-body" id="modalbody">
-                <h5>You are about to <b>logout</b>, are you sure?</h5>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a type="button" class="btn btn-danger" href="/logout">Logout</a>
+          <!-- Hidden modal -->
+          <div class="modal fade" id="logoutModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Logout?</h4>
+                </div>
+                <div class="modal-body" id="modalbody">
+                  <h5>You are about to <b>logout</b>, are you sure?</h5>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <a type="button" class="btn btn-danger" href="/logout">Logout</a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </ul>
       </div>
     </div>
-
   </nav>
 
   <!-- map div -->
