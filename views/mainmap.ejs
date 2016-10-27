@@ -34,9 +34,10 @@
   <!-- Material Icon -->
   <link rel="stylesheet" href="/stylesheets/icon.css"/>
 
+<!-- Firebase database stuff -->
 <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.5.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/3.5.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.0/firebase-database.js"></script>
 <script>
   // Initialize Firebase
   var config = {
@@ -47,7 +48,7 @@
     messagingSenderId: "900291118172"
   };
   firebase.initializeApp(config);
-  var storage = firebase.storage();
+  var database = firebase.database();
 
   var i = 1;
   //FileReader that reads GeoJSON to display onto map
@@ -151,9 +152,22 @@
     dlAnchorElem.setAttribute("href",     dataStr     );
     dlAnchorElem.setAttribute("download", "scene.json");
     dlAnchorElem.click();
-    var storageref = firebase.storage().ref();
-    storageref.put(drawnItems);
   }
+  //Write custom markers to database
+  //
+  function writeUserData() {
+    var currentdate = new Date(); 
+    var drawnItemsJson = drawnItems.toGeoJSON();
+  firebase.database().ref('Users/' + <%= user.id %> + '/' + currentdate).set({
+    mapLayer : drawnItemsJson
+  });
+}
+  //Retrieve markers from database
+  //
+  function retrieveUserData() {
+
+  }
+
 </script>
 
 </head>
@@ -248,5 +262,6 @@
   <!-- Init map JS last after "map" div -->
   <script src="/javascripts/mainmap.js"></script>
 
+<button onclick='writeUserData()'>Test</button>
 </body>
 </html>
