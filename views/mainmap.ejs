@@ -39,7 +39,6 @@
 <script src="https://www.gstatic.com/firebasejs/3.5.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.5.0/firebase-database.js"></script>
 
-
 </head>
 <body>
   <!-- NavBar Start -->
@@ -183,11 +182,13 @@
         polygon: false,
         rectangle: false,
         circle: false,
-        marker: true
+        marker: {
+            color: 'green'
+        }
     },
     edit: {
         featureGroup: drawnItems,
-        remove: true
+        remove: false
     }
 });
 map.addControl(drawControl);
@@ -196,7 +197,7 @@ var drawControl2 = new L.Control.Draw({
     position: 'topright',
     draw: {
         polyline: {
-            metric: true
+            metric: true,
         },
         polygon: false,
         rectangle: false,
@@ -205,7 +206,7 @@ var drawControl2 = new L.Control.Draw({
     },
     edit: {
         featureGroup: drawnLines,
-        remove: true
+        remove: false
     }
 });
 map.addControl(drawControl2);
@@ -261,9 +262,10 @@ map.addControl(drawControl2);
   //Write custom markers to database
   //
   function writeUserData() {
+    var datatype = 'markers';
     var currentdate = new Date(); 
     var drawnItemsJson = drawnItems.toGeoJSON();
-  firebase.database().ref('Users/' + <%= user.id %> + '/' + currentdate).set({
+  firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ currentdate).set({
     mapLayer : drawnItemsJson
   });
 }
