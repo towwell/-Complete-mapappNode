@@ -18,8 +18,8 @@
   onEachFeature: function (feature, layer) {
     layer.bindPopup(feature.properties.name);
   }}).addTo(map);
+      lcontrol.addOverlay(jsonlayer, 'Imported Layer');
       console.log(jsonObject);
-
   };
   };
   	// For image reading
