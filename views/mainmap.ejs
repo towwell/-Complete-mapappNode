@@ -173,26 +173,14 @@
   var drawnItems = new L.FeatureGroup();
   map.addLayer(drawnItems);
 
+  var drawnLines = new L.FeatureGroup();
+  map.addLayer(drawnLines);
+
   var drawControl = new L.Control.Draw({
     position: 'topright',
     draw: {
-        polyline: {
-            metric: true
-        },
-        polygon: {
-            allowIntersection: false,
-            showArea: true,
-            drawError: {
-                color: '#b00b00',
-                timeout: 1000
-            },
-            shapeOptions: {
-                 color: '#bada55'
-
-           }
-
-        },
-
+        polyline: false,
+        polygon: false,
         rectangle: false,
         circle: false,
         marker: true
@@ -204,14 +192,35 @@
 });
 map.addControl(drawControl);
 
+var drawControl2 = new L.Control.Draw({
+    position: 'topright',
+    draw: {
+        polyline: {
+            metric: true
+        },
+        polygon: false,
+        rectangle: false,
+        circle: false,
+        marker: false
+    },
+    edit: {
+        featureGroup: drawnLines,
+        remove: true
+    }
+});
+map.addControl(drawControl2);
+
   //What happens when custom point created
   map.on('draw:created', function (e) {
       var type = e.layerType,
           layer = e.layer;
 
       if (type === 'marker') {
-  	layer.addTo(drawnItems)
+  	    layer.addTo(drawnItems)
           // Do marker specific actions
+      }
+      if (type === 'polyline'){
+        layer.addTo(drawnLines)
       }
 
       // Do whatever else you need to. (save to db, add to map etc)
@@ -234,7 +243,8 @@ map.addControl(drawControl);
 
   //Overlay map configs
   var overlayMaps = {
-  	"Drawn Markers": drawnItems
+  	"Drawn Markers": drawnItems,
+    "Drawn Lines": drawnLines
   };
   //First load of layer control
   lcontrol = L.control.layers(baseMaps, overlayMaps).addTo(map);
