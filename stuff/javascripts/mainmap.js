@@ -1,3 +1,4 @@
+  var i = 1;
   //FileReader that reads GeoJSON to display onto map
   //
   var loadFile = function(event) {
@@ -18,8 +19,9 @@
   onEachFeature: function (feature, layer) {
     layer.bindPopup(feature.properties.name);
   }}).addTo(map);
-      lcontrol.addOverlay(jsonlayer, 'Imported Layer');
+      lcontrol.addOverlay(jsonlayer, 'Imported Layer ' + i.toString());
       console.log(jsonObject);
+      i++;
   };
   };
   	// For image reading

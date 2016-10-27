@@ -49,6 +49,7 @@
   firebase.initializeApp(config);
   var storage = firebase.storage();
 
+  var i = 1;
   //FileReader that reads GeoJSON to display onto map
   //
   var loadFile = function(event) {
@@ -69,8 +70,9 @@
   onEachFeature: function (feature, layer) {
     layer.bindPopup(feature.properties.name);
   }}).addTo(map);
+      lcontrol.addOverlay(jsonlayer, 'Imported Layer ' + i.toString());
       console.log(jsonObject);
-
+      i++;
   };
   };
   	// For image reading
@@ -182,7 +184,7 @@
                   <h4 class="modal-title">Upload a data file</h4>
                 </div>
                 <div class="modal-body" id="modalbody">
-                  <h5>Upload a data file in <b>GeoJSON</b> format to display on the map</h5>
+                  <h5>Upload a data file in to display on map as imported layer</br></br><b>● GeoJSON</b></br><b>● JSON with Geocoordinates</b></h5>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -202,7 +204,7 @@
                   <h4 class="modal-title">Download layer</h4>
                 </div>
                 <div class="modal-body" id="modalbody">
-                  <h5>Data layer will be saved as <b>JSON</b></h5>
+                  <h5>Data layer will be saved as <b>JSON(GeoJSON)</b></h5>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
