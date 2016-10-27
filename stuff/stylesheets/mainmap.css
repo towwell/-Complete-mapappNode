@@ -44,8 +44,16 @@ body {
   height: 42px
 }
 
-#navbarRight {
+#navbarStyle {
   height: 42px;
+  font-size: 15px;
+  text-align: center;
+}
+
+#dropdownSize {
+  font-size: 13px;
+  padding: 7px;
+  padding-left: 10px;
 }
 
 #logout {
