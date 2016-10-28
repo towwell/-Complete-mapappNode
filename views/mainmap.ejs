@@ -78,6 +78,15 @@
           </div>
           <!-- Upload button, modal trigger -->
           <li><a class="btn btn-primary" data-target="#downloadModal" data-toggle="modal" id="navbarStyle">Download Layer</a></li>
+
+          <li class="dropdown" id="navbarStyle">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #df691a" id="navbarStyle">Download Layer <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a id="dropdownSize" onclick="downloadMarkersJSON()">Download <b>points</b> layer</a></li>
+              <li class="divider"></li>
+              <li><a id="dropdownSize" onclick="downloadLinesJSON()">Download <b>lines</b> layer</a></li>
+            </ul>
+          </li>
           <!-- Hidden modal -->
           <div class="modal fade" id="downloadModal">
             <div class="modal-dialog">
@@ -151,16 +160,6 @@
   };
   firebase.initializeApp(config);
   var database = firebase.database();
-
-  	// For image reading
-  	//
-  	//reader.onload = function(){
-  	//var dataURL = reader.result;
-  	//var output = document.getElementById('output');
-  	//output.src = dataURL;
-  	//};
-  	//reader.readAsDataURL(input.files[0]);
-  	//};
 
   //Basemap initialization
   var mapboxAttribution = 'Using Mapbox'
@@ -256,6 +255,10 @@ map.addControl(drawControl2);
   };
   //First load of layer control
   lcontrol = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+  /////////////////////////////////////////////////////////////
+  //FUNCTIONS BELOW ONLY
+  /////////////////////////////////////////////////////////////
 
   //Download Markers layer into JSON file
   //
