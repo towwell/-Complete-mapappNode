@@ -91,7 +91,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <a class="btn btn-primary" id="downloadAnchorElem" onclick="downloadJSON()">Download</a>
+                  <a class="btn btn-primary" id="downloadAnchorElem" onclick="downloadMarkersJSON()">Download</a>
                 </div>
               </div>
             </div>
@@ -100,9 +100,9 @@
           <li class="dropdown" id="navbarStyle">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #f0ad4e" id="navbarStyle">Save Online  <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a id="dropdownSize" onclick="writeUserData()">Save <b>points</b></a></li>
+              <li><a id="dropdownSize" onclick="writeMarkerData()">Save <b>points</b></a></li>
               <li class="divider"></li>
-              <li><a id="dropdownSize" onclick="">Save <b>lines</b></a></li>
+              <li><a id="dropdownSize" onclick="writeLineData()">Save <b>lines</b></a></li>
             </ul>
           </li>
         </ul>
@@ -257,7 +257,9 @@ map.addControl(drawControl2);
   //First load of layer control
   lcontrol = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-  function downloadJSON(){
+  //Download Markers layer into JSON file
+  //
+  function downloadMarkersJSON(){
     var drawnItemsJson = drawnItems.toGeoJSON();
     console.log(drawnItemsJson);
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnItemsJson));
@@ -266,14 +268,35 @@ map.addControl(drawControl2);
     dlAnchorElem.setAttribute("download", "scene.json");
     dlAnchorElem.click();
   }
+  //Download Lines layer into JSON file
+  //
+  function downloadLinesJSON(){
+     var drawnLinesJson = drawnLines.toGeoJSON();
+    console.log(drawnLinesJson);
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnLinesJson));
+    var dlAnchorElem = document.getElementById('downloadAnchorElem');
+    dlAnchorElem.setAttribute("href",     dataStr     );
+    dlAnchorElem.setAttribute("download", "scene.json");
+    dlAnchorElem.click();
+  }
   //Write custom markers to database
   //
-  function writeUserData() {
+  function writeMarkerData() {
     var datatype = 'markers';
     var currentdate = new Date();
     var drawnItemsJson = drawnItems.toGeoJSON();
   firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ currentdate).set({
     mapLayer : drawnItemsJson
+  });
+}
+  //Write custom lines to database
+  //
+  function writeLineData() {
+    var datatype = 'lines';
+    var currentdate = new Date();
+    var drawnLinesJson = drawnLines.toGeoJSON();
+  firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ currentdate).set({
+    mapLayer : drawnLinesJson
   });
 }
   //Retrieve markers from database
