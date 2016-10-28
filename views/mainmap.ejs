@@ -76,9 +76,6 @@
               </div>
             </div>
           </div>
-          <!-- Upload button, modal trigger -->
-          <li><a class="btn btn-primary" data-target="#downloadModal" data-toggle="modal" id="navbarStyle">Download Layer</a></li>
-
           <li class="dropdown" id="navbarStyle">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #df691a" id="navbarStyle">Download Layer <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
@@ -87,24 +84,6 @@
               <li><a id="dropdownSize" onclick="downloadLinesJSON()">Download <b>lines</b> layer</a></li>
             </ul>
           </li>
-          <!-- Hidden modal -->
-          <div class="modal fade" id="downloadModal">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Download layer</h4>
-                </div>
-                <div class="modal-body" id="modalbody">
-                  <h5>Data layer will be saved as <b>JSON(GeoJSON)</b></h5>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <a class="btn btn-primary" id="downloadAnchorElem" onclick="downloadMarkersJSON()">Download</a>
-                </div>
-              </div>
-            </div>
-          </div>
           <!-- Save online -->
           <li class="dropdown" id="navbarStyle">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #f0ad4e" id="navbarStyle">Save Online  <span class="caret"></span></a>
