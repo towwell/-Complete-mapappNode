@@ -262,11 +262,10 @@ map.addControl(drawControl2);
     dlAnchorElem.click();
   }
 
-  var k = 1
   //Write custom markers to database
   //
   function writeMarkerData() {
-    var layername = prompt("Enter marker layer name", "Marker Layer " + k)
+    var layername = prompt("Enter marker layer name", "Marker Layer " + Math.floor((Math.random() * 100) + 1))
     if (layername == null){
      alert("Storage into firebase cancelled");
   }
@@ -282,24 +281,21 @@ map.addControl(drawControl2);
       mapLayer: drawnItemsJson,
       timeEdited: now.toString()
       });
-    k++;
     }
   }
 }
 
-  var j = 1
   //Write custom lines to database
   //
   function writeLineData() {
-    var layername = prompt("Enter line layer name", "Line Layer " + j)
+    var layername = prompt("Enter line layer name", "Line Layer " + Math.floor((Math.random() * 100) + 1))
     var datatype = 'Lines';
     var now = new Date();
     var drawnLinesJson = drawnLines.toGeoJSON();
-  firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ layername).set({
+    firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ layername).set({
     mapLayer : drawnLinesJson,
     timeEdited: now.toString()
   });
-  j++;
 }
   //Check database for similar lines
   // (WIP)
@@ -308,7 +304,7 @@ map.addControl(drawControl2);
     var a = snapshot.child(layername).exists();
     console.log(a);
     return a;
-});
+    });
   }
   //Retrieve markers from database
   //
