@@ -34,10 +34,20 @@
   <!-- Material Icon -->
   <link rel="stylesheet" href="/stylesheets/icon.css"/>
 
-<!-- Firebase database stuff -->
-<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
-<script src="https://www.gstatic.com/firebasejs/3.5.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/3.5.0/firebase-database.js"></script>
+  <!-- Firebase database stuff -->
+  <script src="/javascripts/firebase.js"></script>
+  <script src="/javascripts/firebase-app.js"></script>
+  <script src="/javascripts/firebase-database.js"></script>
+
+  <!-- SHP to GeoJSON -->
+  <script src="/javascripts/proj4.js"></script>
+  <script src="/javascripts/jszip.js"></script>
+  <script src="/javascripts/jszip-utils.js"></script>
+  <!--[if IE]>
+  <script type="text/javascript" src="/javascripts/jszip-utils-ie.js"></script>
+  <![endif]-->
+  <script src="/javascripts/preprocess.js"></script>
+  <script src="/javascripts/preview.js"></script>
 
 </head>
 <body>
@@ -125,6 +135,9 @@
   <!-- map div -->
   <div id='map'></div>
 
+  <!-- <button onclick="load()">test</button> -->
+  <button> <input id="shapeFileUpload" type='file' accept='application/zip' onchange="load()"> </button>
+
   <!-- Init map JS last after "map" div -->
   <script src="/javascripts/mainmap.js"></script>
 </body>
@@ -137,8 +150,8 @@
     storageBucket: "awesome-93639.appspot.com",
     messagingSenderId: "900291118172"
   };
-  firebase.initializeApp(config);
-  var database = firebase.database();
+  // firebase.initializeApp(config);
+  // var database = firebase.database();
 
   //Basemap initialization
   var current = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
@@ -171,6 +184,10 @@
       zoom: 12,
       layers: [current]
   });
+
+  // SHP to GeoJSON
+  vector = L.geoJson().addTo(map);
+
   //Drawn items layer init
   var drawnItems = new L.FeatureGroup();
   map.addLayer(drawnItems);
@@ -359,5 +376,17 @@ map.addControl(drawControl2);
   };
   };
 
+  function load() {
+    var x = document.getElementById("shapeFileUpload");
+    var file = x.files[0];
+    loadshp({
+        url: file,
+        encoding: 'big5',
+        EPSG: 3826
+    }, function(data) {
+        vector.addData(data);
+        map.fitBounds(vector.getBounds());
+    });
+  }
 </script>
 </html>
