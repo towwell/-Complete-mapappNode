@@ -141,17 +141,35 @@
   var database = firebase.database();
 
   //Basemap initialization
-  var mapboxAttribution = 'Using Mapbox'
-  var myurl = 'https://api.mapbox.com/styles/v1/towwell/ciugfz4qs00ix2is1aej7h4mh/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidG93d2VsbCIsImEiOiJjaXVnZndjdnkwMDRsMnRveWR4OGdibmdqIn0.053ocWE7UF4hdJuc1PN9ew';
-  var myurl2 = 'https://api.mapbox.com/styles/v1/towwell/ciughc16p002p2jqwv4nxojej/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidG93d2VsbCIsImEiOiJjaXVnZndjdnkwMDRsMnRveWR4OGdibmdqIn0.053ocWE7UF4hdJuc1PN9ew'
-  var grayscale = L.tileLayer(myurl, {id: 'mapbox://styles/towwell/ciugfz4qs00ix2is1aej7h4mh', attribution: mapboxAttribution}),
-      streets   = L.tileLayer(myurl2, {id: 'mapbox://styles/towwell/ciughc16p002p2jqwv4nxojej', attribution: mapboxAttribution});
-
+  var current = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
+            detectRetina: true,
+						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+						maxZoom: 18,
+            minZoom: 11
+					});
+  var night = L.tileLayer('http://maps-{s}.onemap.sg/v2/Night/{z}/{x}/{y}.png', {
+            detectRetina: true,
+						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+						maxZoom: 18,
+            minZoom: 11
+					});
+  var grey = L.tileLayer('http://maps-{s}.onemap.sg/v2/Grey/{z}/{x}/{y}.png', {
+            detectRetina: true,
+						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+						maxZoom: 18,
+            minZoom: 11
+					});
+  var original = L.tileLayer('http://maps-{s}.onemap.sg/v2/Original/{z}/{x}/{y}.png', {
+            detectRetina: true,
+						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+						maxZoom: 18,
+            minZoom: 11
+					});
     map.remove();
   	var map = L.map('map', {
-      center: [1.352648, 103.810827],
+      center: [1.32073, 103.910827],
       zoom: 12,
-      layers: [grayscale]
+      layers: [current]
   });
   //Drawn items layer init
   var drawnItems = new L.FeatureGroup();
@@ -223,8 +241,10 @@ map.addControl(drawControl2);
 
   //Basemap configs
   var baseMaps = {
-      "Grayscale": grayscale,
-      "Streets": streets
+      "Default": current,
+      "Night": night,
+      "Grey": grey,
+      "Original": original
   };
 
   //Overlay map configs
