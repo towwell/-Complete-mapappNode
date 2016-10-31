@@ -50,7 +50,7 @@ body {
   text-align: center;
 }
 
-#dropdownSize {
+.dropdownSize {
   font-size: 13px;
   padding: 7px;
   padding-left: 10px;

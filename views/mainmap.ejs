@@ -79,9 +79,9 @@
           <li class="dropdown" id="navbarStyle">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #df691a" id="navbarStyle">Download Layer <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a id="dropdownSize" onclick="downloadMarkersJSON()">Download <b>points</b> layer</a></li>
+              <li><a class="dropdownSize" id="downloadAnchorElem" onclick="downloadMarkersJSON()">Download <b>points</b> layer</a></li>
               <li class="divider"></li>
-              <li><a id="dropdownSize" onclick="downloadLinesJSON()">Download <b>lines</b> layer</a></li>
+              <li><a class="dropdownSize" id="downloadAnchorElem" onclick="downloadLinesJSON()">Download <b>lines</b> layer</a></li>
             </ul>
           </li>
           <!-- Save online -->
@@ -261,26 +261,55 @@ map.addControl(drawControl2);
     dlAnchorElem.setAttribute("download", "scene.json");
     dlAnchorElem.click();
   }
+
+  var k = 1
   //Write custom markers to database
   //
   function writeMarkerData() {
-    var datatype = 'markers';
-    var currentdate = new Date();
-    var drawnItemsJson = drawnItems.toGeoJSON();
-  firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ currentdate).set({
-    mapLayer : drawnItemsJson
-  });
+    var layername = prompt("Enter marker layer name", "Marker Layer " + k)
+    if (layername == null){
+     alert("Storage into firebase cancelled");
+  }
+    else{
+    if (checkforDuplicates(layername)){
+      alert("Firebase already has map layer of that name. Input another name instead")
+    }
+    else {
+      var datatype = 'Markers';
+      var now = new Date();
+      var drawnItemsJson = drawnItems.toGeoJSON();
+      firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + layername).set({
+      mapLayer: drawnItemsJson,
+      timeEdited: now.toString()
+      });
+    k++;
+    }
+  }
 }
+
+  var j = 1
   //Write custom lines to database
   //
   function writeLineData() {
-    var datatype = 'lines';
-    var currentdate = new Date();
+    var layername = prompt("Enter line layer name", "Line Layer " + j)
+    var datatype = 'Lines';
+    var now = new Date();
     var drawnLinesJson = drawnLines.toGeoJSON();
-  firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ currentdate).set({
-    mapLayer : drawnLinesJson
+  firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ layername).set({
+    mapLayer : drawnLinesJson,
+    timeEdited: now.toString()
   });
+  j++;
 }
+  //Check database for similar lines
+  // (WIP)
+  function checkforDuplicates(layername){
+    firebase.database().ref('Users/' + <%= user.id %> + 'Markers').once('value').then(function(snapshot) {
+    var a = snapshot.child(layername).exists();
+    console.log(a);
+    return a;
+});
+  }
   //Retrieve markers from database
   //
   function retrieveUserData() {
