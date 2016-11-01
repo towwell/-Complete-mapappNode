@@ -129,7 +129,7 @@
   <!-- map div -->
   <div id='map'></div>
 
-  <!-- <button onclick="load()">test</button> -->
+   <button onclick="retrieveUserData()">test</button>
   <!-- <button> <input id="shapeFileUpload" type='file' accept='application/zip' onchange="load()"> </button> -->
 
   <!-- Init map JS last after "map" div -->
@@ -381,7 +381,7 @@
         });
       }
     }
-  }restr
+  }
 
   //Write custom lines to database
   //
@@ -409,7 +409,18 @@
   //Retrieve markers from database
   //
   function retrieveUserData() {
-
+    var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Markers/");
+    query.once("value")
+      .then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+        // key will be "ada" the first time and "alan" the second time
+        var key = childSnapshot.key;
+        console.log(key)
+        // childData will be the actual contents of the child
+        var childData = childSnapshot.val();
+      });
+    });
   }
+
 </script>
 </html>
