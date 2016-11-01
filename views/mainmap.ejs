@@ -67,40 +67,30 @@
       <!-- align left buttons -->
         <ul class="nav navbar-nav" id="navbarItemGap">
           <!-- Upload button, modal trigger -->
-          <li><a class="btn btn-success" data-target="#uploadModal" data-toggle="modal" id="navbarStyle">Upload Layer</a></li>
-          <!-- Hidden modal -->
-          <div class="modal fade" id="uploadModal">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Upload layer</h4>
-                </div>
-                <div class="modal-body" id="modalbody">
-                  <h5>Upload a data file in to display on map as imported layer</br></br><b>● GeoJSON</b></br><b>● JSON with Geocoordinates</b></h5>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <label class="btn btn-success" style="height: 42px;">Select File<input style="display: none;" type='file' accept='Json' onchange='loadFile(event)'></label>
-                </div>
-              </div>
-            </div>
-          </div>
-          <li class="dropdown" id="navbarStyle">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #df691a" id="navbarStyle">Download Layer <span class="caret"></span></a>
+          <li class="dropdown navbarStyle">
+          <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #5cb85c">Upload Layer <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a class="dropdownSize" id="downloadAnchorElem" onclick="downloadMarkersJSON()">Download <b>points</b> layer</a></li>
+              <li><label class="btn dropdownStyle" style="height: 42px;"><input id="uploadJSON" style="position: absolute; display: none;" type='file' accept='Json' onchange="loadFile(event)">Upload <b>JSON</b></label></li>
               <li class="divider"></li>
-              <li><a class="dropdownSize" id="downloadAnchorElem" onclick="downloadLinesJSON()">Download <b>lines</b> layer</a></li>
+              <li><label class="btn dropdownStyle" style="height: 42px;"><input id="uploadSHP" style="position: absolute; display: none;" type='file' accept='application/zip' onchange="uploadSHP()">Upload <b>SHP</b></label></li>
+            </ul>
+          </li>
+          <!-- Download dropdown -->
+          <li class="dropdown navbarStyle">
+          <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #df691a">Download Layer <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a id="downloadPoints" class="dropdownStyle" onclick="downloadPointsJSON()">Download <b>points</b> layer</a></li>
+              <li class="divider"></li>
+              <li><a id="downloadLines" class="dropdownStyle" onclick="downloadLinesJSON()">Download <b>lines</b> layer</a></li>
             </ul>
           </li>
           <!-- Save online -->
-          <li class="dropdown" id="navbarStyle">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #f0ad4e" id="navbarStyle">Save Online  <span class="caret"></span></a>
+          <li class="dropdown navbarStyle">
+          <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #f0ad4e">Save Online  <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a id="dropdownSize" onclick="writeMarkerData()">Save <b>points</b></a></li>
+              <li><a class="dropdownStyle" onclick="writeMarkerData()">Save <b>points</b></a></li>
               <li class="divider"></li>
-              <li><a id="dropdownSize" onclick="writeLineData()">Save <b>lines</b></a></li>
+              <li><a class="dropdownStyle" onclick="writeLineData()">Save <b>lines</b></a></li>
             </ul>
           </li>
         </ul>
@@ -142,7 +132,10 @@
   <script src="/javascripts/mainmap.js"></script>
 </body>
 <script>
-  // Initialize Firebase
+
+  /////////////////////////////////////////////////////////////
+  // INIT FIREBASE
+  /////////////////////////////////////////////////////////////
   var config = {
     apiKey: "AIzaSyBidD56QDaYhdtyNGS-rWhSzSfmzIWSmNk",
     authDomain: "awesome-93639.firebaseapp.com",
@@ -150,10 +143,12 @@
     storageBucket: "awesome-93639.appspot.com",
     messagingSenderId: "900291118172"
   };
-  // firebase.initializeApp(config);
-  // var database = firebase.database();
+  firebase.initializeApp(config);
+  var database = firebase.database();
 
-  //Basemap initialization
+  /////////////////////////////////////////////////////////////
+  // INIT BASE MAP
+  /////////////////////////////////////////////////////////////
   var current = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
             detectRetina: true,
 						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
@@ -210,31 +205,31 @@
         featureGroup: drawnItems,
         remove: false
     }
-});
-map.addControl(drawControl);
+  });
+  map.addControl(drawControl);
 
-var drawControl2 = new L.Control.Draw({
-    position: 'topright',
-    draw: {
-        polyline: {
-            metric: true,
-        },
-        polygon: false,
-        rectangle: false,
-        circle: false,
-        marker: false
-    },
-    edit: {
-        featureGroup: drawnLines,
-        remove: false
-    }
-});
-map.addControl(drawControl2);
+  var drawControl2 = new L.Control.Draw({
+      position: 'topright',
+      draw: {
+          polyline: {
+              metric: true,
+          },
+          polygon: false,
+          rectangle: false,
+          circle: false,
+          marker: false
+      },
+      edit: {
+          featureGroup: drawnLines,
+          remove: false
+      }
+  });
+  map.addControl(drawControl2);
 
   //What happens when custom point created
   map.on('draw:created', function (e) {
       var type = e.layerType,
-          layer = e.layer;
+      layer = e.layer;
 
       if (type === 'marker') {
   	    layer.addTo(drawnItems)
@@ -258,10 +253,10 @@ map.addControl(drawControl2);
 
   //Basemap configs
   var baseMaps = {
-      "Default": current,
-      "Night": night,
-      "Grey": grey,
-      "Original": original
+    "Default": current,
+    "Night": night,
+    "Grey": grey,
+    "Original": original
   };
 
   //Overlay map configs
@@ -269,33 +264,72 @@ map.addControl(drawControl2);
   	"Drawn Markers": drawnItems,
     "Drawn Lines": drawnLines
   };
+
   //First load of layer control
   lcontrol = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
   /////////////////////////////////////////////////////////////
   //FUNCTIONS BELOW ONLY
   /////////////////////////////////////////////////////////////
+  //Upload JSON
+  //
+  var i = 1;
+  var loadFile = function(event) {
+
+    var input = event.target;
+    var reader = new FileReader();
+    // Read the file
+    reader.readAsText(input.files[0]);
+    // Invoked when file is loading.
+    reader.onload = function(){
+      // parse file to JSON object
+      var jsonObject = reader.result;
+      var json = JSON.parse(jsonObject);
+      jsonlayer = L.geoJson(json, {
+        onEachFeature: function (feature, layer) {
+          layer.bindPopup(feature.properties.name);
+        }}).addTo(map);
+        lcontrol.addOverlay(jsonlayer, 'Imported JSON Layer ' + i.toString());
+        i++;
+    };
+  };
+  //Upload SHP
+  //
+  function uploadSHP() {
+    var x = document.getElementById("uploadSHP");
+    var file = x.files[0];
+    loadshp({
+        url: file,
+        encoding: 'big5',
+        EPSG: 3826
+    }, function(data) {
+        vector.addData(data);
+        map.fitBounds(vector.getBounds());
+        // lcontrol.addOverlay(data, 'Imported SHP Layer');
+    });
+  }
 
   //Download Markers layer into JSON file
   //
-  function downloadMarkersJSON(){
+  function downloadPointsJSON(){
     var drawnItemsJson = drawnItems.toGeoJSON();
     console.log(drawnItemsJson);
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnItemsJson));
-    var dlAnchorElem = document.getElementById('downloadAnchorElem');
+    var dlAnchorElem = document.getElementById('downloadPoints');
     dlAnchorElem.setAttribute("href",     dataStr     );
-    dlAnchorElem.setAttribute("download", "scene.json");
+    dlAnchorElem.setAttribute("download", "points.json");
     dlAnchorElem.click();
   }
+
   //Download Lines layer into JSON file
   //
   function downloadLinesJSON(){
      var drawnLinesJson = drawnLines.toGeoJSON();
     console.log(drawnLinesJson);
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnLinesJson));
-    var dlAnchorElem = document.getElementById('downloadAnchorElem');
+    var dlAnchorElem = document.getElementById('downloadLines');
     dlAnchorElem.setAttribute("href",     dataStr     );
-    dlAnchorElem.setAttribute("download", "scene.json");
+    dlAnchorElem.setAttribute("download", "lines.json");
     dlAnchorElem.click();
   }
 
@@ -304,23 +338,23 @@ map.addControl(drawControl2);
   function writeMarkerData() {
     var layername = prompt("Enter marker layer name", "Marker Layer " + Math.floor((Math.random() * 100) + 1))
     if (layername == null){
-     alert("Storage into firebase cancelled");
-  }
+      alert("Storage into firebase cancelled");
+    }
     else{
-    if (checkforDuplicates(layername)){
-      alert("Firebase already has map layer of that name. Input another name instead")
-    }
-    else {
-      var datatype = 'Markers';
-      var now = new Date();
-      var drawnItemsJson = drawnItems.toGeoJSON();
-      firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + layername).set({
-      mapLayer: drawnItemsJson,
-      timeEdited: now.toString()
-      });
+      if (checkforDuplicates(layername)){
+        alert("Firebase already has map layer of that name. Input another name instead")
+      }
+      else {
+        var datatype = 'Markers';
+        var now = new Date();
+        var drawnItemsJson = drawnItems.toGeoJSON();
+        firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + layername).set({
+          mapLayer: drawnItemsJson,
+          timeEdited: now.toString()
+        });
+      }
     }
   }
-}
 
   //Write custom lines to database
   //
@@ -329,11 +363,12 @@ map.addControl(drawControl2);
     var datatype = 'Lines';
     var now = new Date();
     var drawnLinesJson = drawnLines.toGeoJSON();
-    firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ layername).set({
     mapLayer : drawnLinesJson,
-    timeEdited: now.toString()
-  });
-}
+    firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ layername).set({
+      timeEdited: now.toString()
+    });
+  }
+
   //Check database for similar lines
   // (WIP)
   function checkforDuplicates(layername){
@@ -343,50 +378,11 @@ map.addControl(drawControl2);
     return a;
     });
   }
+
   //Retrieve markers from database
   //
   function retrieveUserData() {
 
-  }
-
-  var i = 1;
-  //FileReader that reads GeoJSON to display onto map
-  //
-  var loadFile = function(event) {
-  // Init
-  var input = event.target;
-  var reader = new FileReader();
-
-  // Read the file
-  reader.readAsText(input.files[0]);
-
-  // Invoked when file is loading.
-  reader.onload = function(){
-
-      // parse file to JSON object
-      var jsonObject = reader.result;
-      var json = JSON.parse(jsonObject);
-      jsonlayer = L.geoJson(json, {
-  onEachFeature: function (feature, layer) {
-    layer.bindPopup(feature.properties.name);
-  }}).addTo(map);
-      lcontrol.addOverlay(jsonlayer, 'Imported Layer ' + i.toString());
-      console.log(jsonObject);
-      i++;
-  };
-  };
-
-  function load() {
-    var x = document.getElementById("shapeFileUpload");
-    var file = x.files[0];
-    loadshp({
-        url: file,
-        encoding: 'big5',
-        EPSG: 3826
-    }, function(data) {
-        vector.addData(data);
-        map.fitBounds(vector.getBounds());
-    });
   }
 </script>
 </html>
