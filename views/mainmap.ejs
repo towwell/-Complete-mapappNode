@@ -6,7 +6,7 @@
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
   <!-- jquery -->
-  <script src="/javascripts/jquery-3.1.1.slim.min.js"></script>
+  <script src="/javascripts/jquery-3.1.1.min.js"></script>
 
   <!-- mapbox gl -->
   <script src='/javascripts/mapbox-gl.js'></script>
@@ -33,6 +33,10 @@
 
   <!-- Material Icon -->
   <link rel="stylesheet" href="/stylesheets/icon.css"/>
+
+  <!-- Toastr -->
+  <link rel="stylesheet" href="/stylesheets/toastr.min.css"/>
+  <script src="/javascripts/toastr.min.js"></script>
 
   <!-- Firebase database stuff -->
   <script src="/javascripts/firebase.js"></script>
@@ -70,7 +74,7 @@
           <li class="dropdown navbarStyle">
           <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #5cb85c">Upload Layer <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><label class="btn dropdownStyle" style="height: 42px;"><input id="uploadJSON" style="position: absolute; display: none;" type='file' accept='Json' onchange="loadFile(event)">Upload <b>JSON</b></label></li>
+              <li><label class="btn dropdownStyle" style="height: 42px;"><input id="uploadJSON" style="position: absolute; display: none;" type='file' accept='Json' onchange="loadFile(event)">Upload <b>JSON/GeoJSON</b></label></li>
               <li class="divider"></li>
               <li><label class="btn dropdownStyle" style="height: 42px;"><input id="uploadSHP" style="position: absolute; display: none;" type='file' accept='application/zip' onchange="uploadSHP()">Upload <b>SHP</b></label></li>
             </ul>
@@ -126,7 +130,7 @@
   <div id='map'></div>
 
   <!-- <button onclick="load()">test</button> -->
-  <button> <input id="shapeFileUpload" type='file' accept='application/zip' onchange="load()"> </button>
+  <!-- <button> <input id="shapeFileUpload" type='file' accept='application/zip' onchange="load()"> </button> -->
 
   <!-- Init map JS last after "map" div -->
   <script src="/javascripts/mainmap.js"></script>
@@ -271,6 +275,25 @@
   /////////////////////////////////////////////////////////////
   //FUNCTIONS BELOW ONLY
   /////////////////////////////////////////////////////////////
+
+  //Toastr Config
+  //
+  toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": true,
+    "progressBar": true,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
+
   //Upload JSON
   //
   var i = 1;
@@ -289,8 +312,9 @@
         onEachFeature: function (feature, layer) {
           layer.bindPopup(feature.properties.name);
         }}).addTo(map);
-        lcontrol.addOverlay(jsonlayer, 'Imported JSON Layer ' + i.toString());
+        lcontrol.addOverlay(jsonlayer, 'Imported JSON/GeoJSON Layer ' + i.toString());
         i++;
+        toastr.success('Successfully imported JSON/GeoJSON file!', 'Success!', {timeOut: 2000});
     };
   };
   //Upload SHP
@@ -306,6 +330,7 @@
         vector.addData(data);
         map.fitBounds(vector.getBounds());
         // lcontrol.addOverlay(data, 'Imported SHP Layer');
+        toastr.success('Successfully imported SHP file!', 'Success!', {timeOut: 2000});
     });
   }
 
@@ -338,11 +363,13 @@
   function writeMarkerData() {
     var layername = prompt("Enter marker layer name", "Marker Layer " + Math.floor((Math.random() * 100) + 1))
     if (layername == null){
-      alert("Storage into firebase cancelled");
+      // alert("Storage into firebase cancelled");
+      toastr.error('Operation cancelled by user.', 'Storage into data base cancelled', {timeOut: 4000});
     }
     else{
       if (checkforDuplicates(layername)){
-        alert("Firebase already has map layer of that name. Input another name instead")
+        // alert("Firebase already has map layer of that name. Input another name instead")
+        toastr.error('Invalid name.', 'Storage into data base cancelled', {timeOut: 4000});
       }
       else {
         var datatype = 'Markers';
@@ -354,7 +381,7 @@
         });
       }
     }
-  }
+  }restr
 
   //Write custom lines to database
   //
