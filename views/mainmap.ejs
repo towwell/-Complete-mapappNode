@@ -339,23 +339,33 @@
   //Download Markers layer into JSON file
   //
   function downloadPointsJSON(){
-    var drawnItemsJson = drawnItems.toGeoJSON();
-    console.log(drawnItemsJson);
-    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnItemsJson));
-    var dlAnchorElem = document.getElementById('downloadPoints');
-    dlAnchorElem.setAttribute("href",     dataStr     );
-    dlAnchorElem.setAttribute("download", "points.json");
+    var pointsFileName = prompt("File name for Points JSON file.");
+    if (pointsFileName != null) {
+      var drawnItemsJson = drawnItems.toGeoJSON();
+      console.log(drawnItemsJson);
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnItemsJson));
+      var dlAnchorElem = document.getElementById('downloadPoints');
+      dlAnchorElem.setAttribute("href",     dataStr     );
+      dlAnchorElem.setAttribute("download", pointsFileName + ".json");
+    } else {
+      toastr.error('Operation cancelled by user.', 'File download cancelled', {timeOut: 4000});
+    }
   }
 
   //Download Lines layer into JSON file
   //
   function downloadLinesJSON(){
-     var drawnLinesJson = drawnLines.toGeoJSON();
-    console.log(drawnLinesJson);
-    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnLinesJson));
-    var dlAnchorElem = document.getElementById('downloadLines');
-    dlAnchorElem.setAttribute("href",     dataStr     );
-    dlAnchorElem.setAttribute("download", "lines.json");
+    var linesFileName = prompt("File name for Lines JSON file.");
+    if (linesFileName != null) {
+      var drawnLinesJson = drawnLines.toGeoJSON();
+      console.log(drawnLinesJson);
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnLinesJson));
+      var dlAnchorElem = document.getElementById('downloadLines');
+      dlAnchorElem.setAttribute("href",     dataStr     );
+      dlAnchorElem.setAttribute("download", linesFileName + ".json");
+    } else {
+      toastr.error('Operation cancelled by user.', 'File download cancelled', {timeOut: 4000});
+    }
   }
 
   //Write custom markers to database
