@@ -296,44 +296,58 @@
 
   //Upload JSON
   //
-  var i = 1;
   var loadFile = function(event) {
-
-    var input = event.target;
-    var reader = new FileReader();
-    // Read the file
-    reader.readAsText(input.files[0]);
-    // Invoked when file is loading.
-    reader.onload = function(){
-      // parse file to JSON object
-      var jsonObject = reader.result;
-      var json = JSON.parse(jsonObject);
-      jsonlayer = L.geoJson(json, {
-        onEachFeature: function (feature, layer) {
-          layer.bindPopup(feature.properties.name);
-        }}).addTo(map);
-        lcontrol.addOverlay(jsonlayer, 'Imported JSON/GeoJSON Layer ' + i.toString());
-        i++;
+    var uploadJSONName = prompt("JSON Layer name.");
+    if (uploadJSONName != null) {
+      var input = event.target;
+      var reader = new FileReader();
+      // Read the file
+      reader.readAsText(input.files[0]);
+      // Invoked when file is loading.
+      reader.onload = function(){
+        // parse file to JSON object
+        var jsonObject = reader.result;
+        var json = JSON.parse(jsonObject);
+        jsonlayer = L.geoJson(json, {
+          onEachFeature: function (feature, layer) {
+            layer.bindPopup(feature.properties.name);
+          }
+        }).addTo(map);
+        lcontrol.addOverlay(jsonlayer, uploadJSONName);
         toastr.success('Successfully imported JSON/GeoJSON file!', 'Success!', {timeOut: 2000});
-    };
+      };
+    } else {
+      if (uploadJSONName == "" || uploadJSONName == null) {
+        toastr.error('Operation cancelled by system.', 'Layer name not given', {timeOut: 4000});
+      } else {
+        toastr.error('Operation cancelled by user.', 'Layer upload cancelled', {timeOut: 4000});
+      }
+    }
   };
   //Upload SHP
   //
-  var ii = 1;
   function uploadSHP() {
+    var uploadSHPName = prompt("SHP Layer name.");
     var x = document.getElementById("uploadSHP");
     var file = x.files[0];
-    loadshp({
-        url: file,
-        encoding: 'big5',
-        EPSG: 3826
-    }, function(data) {
-        vector.addData(data);
-        map.fitBounds(vector.getBounds());
-        lcontrol.addOverlay(vector, 'Imported SHP Layer ' + ii.toString());
-        ii++;
-        toastr.success('Successfully imported SHP file!', 'Success!', {timeOut: 2000});
-    });
+    if (uploadSHPName != null) {
+      loadshp({
+          url: file,
+          encoding: 'big5',
+          EPSG: 3826
+      }, function(data) {
+          vector.addData(data);
+          map.fitBounds(vector.getBounds());
+          lcontrol.addOverlay(vector, uploadSHPName);
+          toastr.success('Successfully imported SHP file!', 'Success!', {timeOut: 2000});
+      });
+    } else {
+      if (uploadSHPName == "" || uploadSHPName == null) {
+        toastr.error('Operation cancelled by system.', 'Layer name not given', {timeOut: 4000});
+      } else {
+        toastr.error('Operation cancelled by user.', 'Layer upload cancelled', {timeOut: 4000});
+      }
+    }
   }
 
   //Download Markers layer into JSON file
