@@ -74,9 +74,9 @@
           <li class="dropdown navbarStyle">
           <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #5cb85c">Upload Layer <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><label class="btn dropdownStyle" style="height: 42px;"><input id="uploadJSON" style="position: absolute; display: none;" type='file' accept='Json' onchange="loadFile(event)">Upload <b>JSON/GeoJSON</b></label></li>
+              <li><label class="btn dropdownStyle"><input id="uploadJSON" style="position: absolute; display: none;" type='file' accept='Json' onchange="loadFile(event)">Upload <b>JSON/GeoJSON</b></label></li>
               <li class="divider"></li>
-              <li><label class="btn dropdownStyle" style="height: 42px;"><input id="uploadSHP" style="position: absolute; display: none;" type='file' accept='application/zip' onchange="uploadSHP()">Upload <b>SHP</b></label></li>
+              <li><label class="btn dropdownStyle"><input id="uploadSHP" style="position: absolute; display: none;" type='file' accept='application/zip' onchange="uploadSHP()">Upload <b>SHP</b></label></li>
             </ul>
           </li>
           <!-- Download dropdown -->
@@ -345,7 +345,6 @@
     var dlAnchorElem = document.getElementById('downloadPoints');
     dlAnchorElem.setAttribute("href",     dataStr     );
     dlAnchorElem.setAttribute("download", "points.json");
-    dlAnchorElem.click();
   }
 
   //Download Lines layer into JSON file
@@ -357,7 +356,6 @@
     var dlAnchorElem = document.getElementById('downloadLines');
     dlAnchorElem.setAttribute("href",     dataStr     );
     dlAnchorElem.setAttribute("download", "lines.json");
-    dlAnchorElem.click();
   }
 
   //Write custom markers to database
