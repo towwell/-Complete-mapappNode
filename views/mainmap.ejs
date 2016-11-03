@@ -97,6 +97,26 @@
               <li><a class="dropdownStyle" onclick="writeLineData()">Save <b>lines</b></a></li>
             </ul>
           </li>
+          <!--Retrieve from firebase -->
+          <li class="navbarStyle"><a class="btn btn-danger" data-target="#retrieveModal"  data-toggle="modal" id="navbarStyle">Download from firebase</a></li>
+          <!-- Hidden Modal -->
+          <div class="modal fade" id="retrieveModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Retrieve from firebase?</h4>
+                </div>
+                <div class="modal-body" id="modalbody">
+                  <h5>It will take a few minutes to import all layers from <%= user.username %> firebase account </h5>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <a type="button" class="btn btn-danger" onclick="retrieveUserData()">Retrieve</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </ul>
       <!-- align right buttons -->
         <ul class="nav navbar-nav navbar-right" id="logout">
@@ -129,7 +149,9 @@
   <!-- map div -->
   <div id='map'></div>
 
-   <button onclick="retrieveUserData()">test</button>
+  <!-- Test button function -->
+  <!-- <button onclick="retrieveUserData()">test</button> -->
+
   <!-- <button> <input id="shapeFileUpload" type='file' accept='application/zip' onchange="load()"> </button> -->
 
   <!-- Init map JS last after "map" div -->
