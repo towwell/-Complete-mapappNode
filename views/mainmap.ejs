@@ -442,6 +442,12 @@
         console.log(key)
         // childData will be the actual contents of the child
         var childData = childSnapshot.val();
+        console.log(childData.mapLayer)
+        jsonlayer = L.geoJson(childData.mapLayer, {
+          onEachFeature: function (feature, layer) {
+          }
+        }).addTo(map);
+        lcontrol.addOverlay(jsonlayer, key);
       });
     });
   }
