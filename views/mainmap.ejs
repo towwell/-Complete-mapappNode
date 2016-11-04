@@ -208,11 +208,6 @@
   <!-- map div -->
   <div id='map'></div>
 
-  <!-- Test button function -->
-   <button onclick="testfunction()">test</button>
-
-  <!-- <button> <input id="shapeFileUpload" type='file' accept='application/zip' onchange="load()"> </button> -->
-
   <!-- Init map JS last after "map" div -->
   <script src="/javascripts/mainmap.js"></script>
 </body>
@@ -239,30 +234,35 @@
 						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
 						maxZoom: 18,
             minZoom: 11
-					});
+	});
+
   var night = L.tileLayer('http://maps-{s}.onemap.sg/v2/Night/{z}/{x}/{y}.png', {
             detectRetina: true,
 						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
 						maxZoom: 18,
             minZoom: 11
-					});
+	});
+
   var grey = L.tileLayer('http://maps-{s}.onemap.sg/v2/Grey/{z}/{x}/{y}.png', {
             detectRetina: true,
 						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
 						maxZoom: 18,
             minZoom: 11
-					});
+	});
+
   var original = L.tileLayer('http://maps-{s}.onemap.sg/v2/Original/{z}/{x}/{y}.png', {
             detectRetina: true,
 						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
 						maxZoom: 18,
             minZoom: 11
-					});
-    map.remove();
-  	var map = L.map('map', {
-      center: [1.32073, 103.910827],
-      zoom: 12,
-      layers: [current]
+	});
+
+  map.remove();
+
+  var map = L.map('map', {
+    center: [1.32073, 103.910827],
+    zoom: 12,
+    layers: [current]
   });
 
   // SHP to GeoJSON
@@ -499,7 +499,7 @@
     var datatype = 'Lines';
     var now = new Date();
     var drawnLinesJson = drawnLines.toGeoJSON();
-    
+
     firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ document.getElementById('nameInputL').value).set({
       mapLayer : drawnLinesJson,
       timeEdited: now.toString(),
@@ -559,10 +559,5 @@
     });
     toastr.success('Successfully retrieved all data layers linked with account <%= user.username %>', 'Success!', {timeOut: 2000});
   }
-
-  function testfunction(){
-    console.log(document.getElementById('nameInput').value)
-  }
-
 </script>
 </html>
