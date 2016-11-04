@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>Main Map</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+  <!-- jquery -->
+  <script src="/javascripts/jquery-3.1.1.min.js"></script>
+
+  <!-- mapbox gl -->
+  <script src='/javascripts/mapbox-gl.js'></script>
+  <link  rel='stylesheet' href='/stylesheets/mapbox-gl.css'/>
+
+  <!-- leaflet -->
+  <link rel="stylesheet" href="/stylesheets/leaflet.css"/>
+  <script src="/javascripts/leaflet.js"></script>
+
+  <!-- leaflet draw -->
+  <link rel="stylesheet" href="/stylesheets/leaflet.draw.css" />
+	<script src="/javascripts/leaflet.draw.js"></script>
+
+  <!-- json2 for stringify function -->
+  <script src="javascripts/json2.js"></script>
+
+  <!-- html style -->
+  <link rel="stylesheet" href="/stylesheets/mainmap.css"/>
+
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/stylesheets/superhero-bootstrap.min.css"/>
+	<script src="/javascripts/bootstrap.min.js"></script>
+
+  <!-- Material Icon -->
+  <link rel="stylesheet" href="/stylesheets/icon.css"/>
+
+  <!-- Toastr -->
+  <link rel="stylesheet" href="/stylesheets/toastr.min.css"/>
+  <script src="/javascripts/toastr.min.js"></script>
+
+  <!-- Firebase database stuff -->
+  <script src="/javascripts/firebase.js"></script>
+  <script src="/javascripts/firebase-app.js"></script>
+  <script src="/javascripts/firebase-database.js"></script>
+
+  <!-- SHP to GeoJSON -->
+  <script src="/javascripts/proj4.js"></script>
+  <script src="/javascripts/jszip.js"></script>
+  <script src="/javascripts/jszip-utils.js"></script>
+  <!--[if IE]>
+  <script type="text/javascript" src="/javascripts/jszip-utils-ie.js"></script>
+  <![endif]-->
+  <script src="/javascripts/preprocess.js"></script>
+  <script src="/javascripts/preview.js"></script>
+
+</head>
+<body>
+  <!-- NavBar Start -->
+  <nav class="navbar navbar-inverse" id="navbar">
+    <div class="container-fluid" style="padding-right: 0;">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand center" id="title"><b>Leaflet Map</b></a>
+      </div>
+      <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
+      <!-- align right buttons -->
+        <ul class="nav navbar-nav navbar-right" id="logout">
+          <li><a class="btn" id="navbarStyle">Welcome back, <b><%= user.username %></b></a></li>
+          <!-- Logout button, modal trigger -->
+          <li><a class="btn btn-danger" data-target="#logoutModal"  data-toggle="modal" id="navbarStyle"><i class="material-icons">power_settings_new</i></a></li>
+          <!-- Hidden modal -->
+          <div class="modal fade" id="logoutModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Logout?</h4>
+                </div>
+                <div class="modal-body" id="modalbody">
+                  <h5>You are about to <b>logout</b>, are you sure?</h5>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <a type="button" class="btn btn-danger" href="/logout">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- map div -->
+  <div id='map'></div>
+
+  <!-- Init map JS last after "map" div -->
+  <script src="/javascripts/mainmap.js"></script>
+</body>
+<script>
+
+  /////////////////////////////////////////////////////////////
+  // INIT FIREBASE
+  /////////////////////////////////////////////////////////////
+  var config = {
+    apiKey: "AIzaSyBidD56QDaYhdtyNGS-rWhSzSfmzIWSmNk",
+    authDomain: "awesome-93639.firebaseapp.com",
+    databaseURL: "https://awesome-93639.firebaseio.com",
+    storageBucket: "awesome-93639.appspot.com",
+    messagingSenderId: "900291118172"
+  };
+  firebase.initializeApp(config);
+  var database = firebase.database();
+
+  /////////////////////////////////////////////////////////////
+  // INIT BASE MAP
+  /////////////////////////////////////////////////////////////
+  var current = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
+            detectRetina: true,
+						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+						maxZoom: 18,
+            minZoom: 11
+	});
+
+  var night = L.tileLayer('http://maps-{s}.onemap.sg/v2/Night/{z}/{x}/{y}.png', {
+            detectRetina: true,
+						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+						maxZoom: 18,
+            minZoom: 11
+	});
+
+  var grey = L.tileLayer('http://maps-{s}.onemap.sg/v2/Grey/{z}/{x}/{y}.png', {
+            detectRetina: true,
+						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+						maxZoom: 18,
+            minZoom: 11
+	});
+
+  var original = L.tileLayer('http://maps-{s}.onemap.sg/v2/Original/{z}/{x}/{y}.png', {
+            detectRetina: true,
+						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+						maxZoom: 18,
+            minZoom: 11
+	});
+
+  map.remove();
+
+  var map = L.map('map', {
+    center: [1.32073, 103.910827],
+    zoom: 12,
+    layers: [current]
+  });
+
+  // SHP to GeoJSON
+  vector = L.geoJson().addTo(map);
+
+  //Basemap configs
+  var baseMaps = {
+    "Default": current,
+    "Night": night,
+    "Grey": grey,
+    "Original": original
+  };
+
+  //Overlay map configs
+  var overlayMaps = {
+
+  };
+
+  //First load of layer control
+  lcontrol = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+  /////////////////////////////////////////////////////////////
+  //FUNCTIONS BELOW ONLY
+  /////////////////////////////////////////////////////////////
+
+  //Toastr Config
+  //
+  toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": true,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
+
+  //Retrieve markers from database
+  //
+  function retrieveUserData() {
+    var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Markers/");
+    query.once("value")
+      .then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+        // key will be "ada" the first time and "alan" the second time
+        var key = childSnapshot.key;
+        console.log(key)
+        // childData will be the actual contents of the child
+        var childData = childSnapshot.val();
+        console.log(childData.mapLayer)
+        jsonlayer = L.geoJson(childData.mapLayer, {
+          onEachFeature: function (feature, layer) {
+            layer.bindPopup('<div>Name:' + childData.name + '</div>');
+          }
+        }).addTo(map);
+        lcontrol.addOverlay(jsonlayer, key);
+      });
+    });
+    var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Lines/");
+    query.once("value")
+      .then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+        // key will be "ada" the first time and "alan" the second time
+        var key = childSnapshot.key;
+        console.log(key)
+        // childData will be the actual contents of the child
+        var childData = childSnapshot.val();
+        console.log(childData.mapLayer)
+        jsonlayer = L.geoJson(childData.mapLayer, {
+          onEachFeature: function (feature, layer) {
+            layer.bindPopup('<div>Test data</div>');
+          }
+        }).addTo(map);
+        lcontrol.addOverlay(jsonlayer, key);
+      });
+    });
+    toastr.success('Successfully retrieved all data layers linked with account <%= user.username %>', 'Success!', {timeOut: 2000});
+  }
+</script>
+</html>

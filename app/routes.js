@@ -20,20 +20,28 @@ module.exports = function(app, passport) {
 
 	// process the login form
 	app.post('/login', passport.authenticate('local-login', {
-            successRedirect : '/mainmap', // redirect to the secure profile section
+            // successRedirect : '/mainmap', // redirect to the secure profile section
             failureRedirect : '/login', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
-		}),
-        function(req, res) {
-            console.log("hello");
+	}),
+		// runs if login success
+  	function(req, res) {
+			console.log(req.user.username);
+			var usernameLocal = req.user.username;
 
-            if (req.body.remember) {
-              req.session.cookie.maxAge = 1000 * 60 * 3;
-            } else {
-              req.session.cookie.expires = false;
-            }
-        res.redirect('/');
-    });
+      if (req.body.remember) {
+      	req.session.cookie.maxAge = 1000 * 60 * 3;
+      } else {
+        req.session.cookie.expires = false;
+      }
+
+			if (usernameLocal.includes("ADMIN-")) {
+				res.redirect('/mainmap');
+			} else {
+				res.redirect('/usermap');
+			}
+  	}
+	);
 
 	// =====================================
 	// SIGNUP ==============================
@@ -65,11 +73,20 @@ module.exports = function(app, passport) {
 	// =====================================
 	// MAIN MAP =========================
 	// =====================================
-app.get('/mainmap', isLoggedIn, function(req, res) {
-	res.render('mainmap.ejs', {
-		user : req.user
+	app.get('/mainmap', isLoggedIn, function(req, res) {
+		res.render('mainmap.ejs', {
+			user : req.user
+		});
 	});
-});
+
+	// =====================================
+	// USER MAP =========================
+	// =====================================
+	app.get('/usermap', isLoggedIn, function(req,res) {
+		res.render('usermap.ejs', {
+			user : req.user
+		});
+	});
 
 	// =====================================
 	// LOGOUT ==============================
