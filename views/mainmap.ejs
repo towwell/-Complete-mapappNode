@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset='utf-8' />
   <title>Main Map</title>
@@ -10,32 +11,32 @@
 
   <!-- mapbox gl -->
   <script src='/javascripts/mapbox-gl.js'></script>
-  <link  rel='stylesheet' href='/stylesheets/mapbox-gl.css'/>
+  <link rel='stylesheet' href='/stylesheets/mapbox-gl.css' />
 
   <!-- leaflet -->
-  <link rel="stylesheet" href="/stylesheets/leaflet.css"/>
+  <link rel="stylesheet" href="/stylesheets/leaflet.css" />
   <script src="/javascripts/leaflet.js"></script>
 
   <!-- leaflet draw -->
   <link rel="stylesheet" href="/stylesheets/leaflet.draw.css" />
-	<script src="/javascripts/leaflet.draw.js"></script>
+  <script src="/javascripts/leaflet.draw.js"></script>
 
   <!-- json2 for stringify function -->
   <script src="javascripts/json2.js"></script>
 
   <!-- html style -->
-  <link rel="stylesheet" href="/stylesheets/mainmap.css"/>
+  <link rel="stylesheet" href="/stylesheets/mainmap.css" />
 
   <!-- bootstrap -->
-  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
-	<link rel="stylesheet" href="/stylesheets/superhero-bootstrap.min.css"/>
-	<script src="/javascripts/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+  <link rel="stylesheet" href="/stylesheets/superhero-bootstrap.min.css" />
+  <script src="/javascripts/bootstrap.min.js"></script>
 
   <!-- Material Icon -->
-  <link rel="stylesheet" href="/stylesheets/icon.css"/>
+  <link rel="stylesheet" href="/stylesheets/icon.css" />
 
   <!-- Toastr -->
-  <link rel="stylesheet" href="/stylesheets/toastr.min.css"/>
+  <link rel="stylesheet" href="/stylesheets/toastr.min.css" />
   <script src="/javascripts/toastr.min.js"></script>
 
   <!-- Firebase database stuff -->
@@ -53,13 +54,57 @@
   <script src="/javascripts/preprocess.js"></script>
   <script src="/javascripts/preview.js"></script>
 
+  <script>
+  /////////////////////////////////////////////////////////////
+  // INIT FIREBASE
+  /////////////////////////////////////////////////////////////
+  var config = {
+    apiKey: "AIzaSyBidD56QDaYhdtyNGS-rWhSzSfmzIWSmNk",
+    authDomain: "awesome-93639.firebaseapp.com",
+    databaseURL: "https://awesome-93639.firebaseio.com",
+    storageBucket: "awesome-93639.appspot.com",
+    messagingSenderId: "900291118172"
+  };
+  firebase.initializeApp(config);
+  var database = firebase.database();
+
+  //Retrieve all layers of logged in user
+  //
+  var layerMarker = new Array();
+  var layerLine = new Array();
+
+  function updateDeleteLayer() {
+    var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Markers/");
+    query.once("value")
+      .then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+        // key will be layer name
+        var key = childSnapshot.key;
+        layerMarker.push(key)
+        })
+      })
+    var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Lines/");
+    query.once("value")
+      .then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+        // key will be layer name
+        var key = childSnapshot.key;
+        layerLine.push(key)
+        })
+      })
+    }
+  window.onload = updateDeleteLayer;
+  </script>
+
 </head>
+
 <body>
   <!-- NavBar Start -->
   <nav class="navbar navbar-default" id="navbar">
     <div class="container-fluid" style="padding-right: 0;">
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+          aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -68,11 +113,11 @@
         <a class="navbar-brand center" id="title"><b>Leaflet Map</b></a>
       </div>
       <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
-      <!-- align left buttons -->
+        <!-- align left buttons -->
         <ul class="nav navbar-nav" id="navbarItemGap">
           <!-- Upload button, modal trigger -->
           <li class="dropdown navbarStyle">
-          <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #5cb85c">Upload Layer <span class="caret"></span></a>
+            <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #5cb85c">Upload Layer <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><label class="btn dropdownStyle"><input id="uploadJSON" style="position: absolute; display: none;" type='file' accept='Json' onchange="loadFile(event)">Upload <b>JSON/GeoJSON</b></label></li>
               <li class="divider"></li>
@@ -81,7 +126,7 @@
           </li>
           <!-- Download dropdown -->
           <li class="dropdown navbarStyle">
-          <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #df691a">Download Layer <span class="caret"></span></a>
+            <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #df691a">Download Layer <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a id="downloadPoints" class="dropdownStyle" onclick="downloadPointsJSON()">Download <b>points</b> layer</a></li>
               <li class="divider"></li>
@@ -90,74 +135,74 @@
           </li>
           <!-- Save online -->
           <li class="dropdown navbarStyle">
-          <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #f0ad4e">Save Online  <span class="caret"></span></a>
+            <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #f0ad4e">Save Online  <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <!-- <li><a class="dropdownStyle" onclick="writeMarkerData()">Save <b>points</b></a></li> -->
-                <li><a class="dropdownStyle" data-target="#saveOnlineModalMarker"  data-toggle="modal" id="navbarStyle">Save drawn <b>Markers</b></a></li>
+              <li><a class="dropdownStyle" data-target="#saveOnlineModalMarker" data-toggle="modal" id="navbarStyle">Save drawn <b>Markers</b></a></li>
               <li class="divider"></li>
               <li><a class="dropdownStyle" data-target="#saveOnlineModalLine" data-toggle="modal">Save drawn <b>lines</b></a></li>
             </ul>
             <!-- Hidden modal -->
-          <div class="modal fade" id="saveOnlineModalMarker">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Save online attributes</h4>
-                </div>
-                <div class="modal-body" id="modalbody">
-                  <div class="form-group">
-                  <label class="control-label" for="focusedInput">Layer Name</label>
-                  <input class="form-control" id="nameInputM" type="text" value="Map Layer">
+            <div class="modal fade" id="saveOnlineModalMarker">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Save online attributes</h4>
                   </div>
-                  <div class="form-group">
-                  <label class="control-label" for="focusedInput">Description</label>
-                  <input class="form-control" id="descriptionInputM" type="text" value="A description">
+                  <div class="modal-body" id="modalbody">
+                    <div class="form-group">
+                      <label class="control-label" for="focusedInput">Layer Name</label>
+                      <input class="form-control" id="nameInputM" type="text" value="Map Layer">
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label" for="focusedInput">Description</label>
+                      <input class="form-control" id="descriptionInputM" type="text" value="A description">
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label" for="focusedInput">Extra information</label>
+                      <input class="form-control" id="extraInputM" type="text" value="*Optional*">
+                    </div>
                   </div>
-                  <div class="form-group">
-                  <label class="control-label" for="focusedInput">Extra information</label>
-                  <input class="form-control" id="extraInputM" type="text" value="*Optional*">
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="writeMarkerData()">Save</a>
                   </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <a type="button" class="btn btn-success" data-dismiss="modal" onclick="writeMarkerData()">Save</a>
                 </div>
               </div>
             </div>
-          </div>
-          <!-- Hidden modal -->
-          <div class="modal fade" id="saveOnlineModalLine">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Save online attributes</h4>
-                </div>
-                <div class="modal-body" id="modalbody">
-                  <div class="form-group">
-                  <label class="control-label" for="focusedInput">Layer Name</label>
-                  <input class="form-control" id="nameInputL" type="text" value="Map Layer">
+            <!-- Hidden modal -->
+            <div class="modal fade" id="saveOnlineModalLine">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Save online attributes</h4>
                   </div>
-                  <div class="form-group">
-                  <label class="control-label" for="focusedInput">Description</label>
-                  <input class="form-control" id="descriptionInputL" type="text" value="A description">
+                  <div class="modal-body" id="modalbody">
+                    <div class="form-group">
+                      <label class="control-label" for="focusedInput">Layer Name</label>
+                      <input class="form-control" id="nameInputL" type="text" value="Map Layer">
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label" for="focusedInput">Description</label>
+                      <input class="form-control" id="descriptionInputL" type="text" value="A description">
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label" for="focusedInput">Extra information</label>
+                      <input class="form-control" id="extraInputL" type="text" value="*Optional*">
+                    </div>
                   </div>
-                  <div class="form-group">
-                  <label class="control-label" for="focusedInput">Extra information</label>
-                  <input class="form-control" id="extraInputL" type="text" value="*Optional*">
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="writeLineData()">Save</a>
                   </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <a type="button" class="btn btn-success" data-dismiss="modal" onclick="writeLineData()">Save</a>
                 </div>
               </div>
             </div>
-          </div>
           </li>
           <!--Retrieve from firebase -->
-          <li class="navbarStyle"><a class="btn btn-info" data-target="#retrieveModal"  data-toggle="modal" id="navbarStyle">Download from Online</a></li>
+          <li class="navbarStyle"><a class="btn btn-info" data-target="#retrieveModal" data-toggle="modal" id="navbarStyle">Download from Online</a></li>
           <!-- Hidden Modal -->
           <div class="modal fade" id="retrieveModal">
             <div class="modal-dialog">
@@ -176,12 +221,45 @@
               </div>
             </div>
           </div>
+          <!-- Delete from firebase -->
+          <li class="navbarStyle"><a class="btn btn-info" data-target="#deleteModal" data-toggle="modal" id="navbarStyle" onclick="populateDeleteSelect()">Delete layer from Online</a></li>
+          <!-- Hidden Modal -->
+          <div class="modal fade" id="deleteModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Delete which layer?</h4>
+                </div>
+                <div class="modal-body" id="modalbody">
+                  <div class="form-group">
+                    <label for="select" class="col-lg-2 control-label">Markers</label>
+                    <select class="form-control" id="selectMarker">
+                      <option>NIL</option>
+                      </select>
+                    <br>
+                  </div>
+                  <div class="form-group">
+                    <label for="select" class="col-lg-2 control-label">Lines</label>
+                    <select class="form-control" id="selectLine">
+                      <option>NIL</option>
+                      </select>
+                    <br>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <a type="button" class="btn btn-success" data-dismiss="modal" onclick="deleteLayerOnline()">Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </ul>
-      <!-- align right buttons -->
+        <!-- align right buttons -->
         <ul class="nav navbar-nav navbar-right" id="logout">
           <li><a class="btn btn-default" id="navbarStyle">Welcome back, <b><%= user.username %></b></a></li>
           <!-- Logout button, modal trigger -->
-          <li><a class="btn btn-danger" data-target="#logoutModal"  data-toggle="modal" id="navbarStyle"><i class="material-icons">power_settings_new</i></a></li>
+          <li><a class="btn btn-danger" data-target="#logoutModal" data-toggle="modal" id="navbarStyle"><i class="material-icons">power_settings_new</i></a></li>
           <!-- Hidden modal -->
           <div class="modal fade" id="logoutModal">
             <div class="modal-dialog">
@@ -212,19 +290,6 @@
   <script src="/javascripts/mainmap.js"></script>
 </body>
 <script>
-
-  /////////////////////////////////////////////////////////////
-  // INIT FIREBASE
-  /////////////////////////////////////////////////////////////
-  var config = {
-    apiKey: "AIzaSyBidD56QDaYhdtyNGS-rWhSzSfmzIWSmNk",
-    authDomain: "awesome-93639.firebaseapp.com",
-    databaseURL: "https://awesome-93639.firebaseio.com",
-    storageBucket: "awesome-93639.appspot.com",
-    messagingSenderId: "900291118172"
-  };
-  firebase.initializeApp(config);
-  var database = firebase.database();
 
   /////////////////////////////////////////////////////////////
   // INIT BASE MAP
@@ -325,6 +390,7 @@
 
       if (type === 'marker') {
   	    layer.addTo(drawnItems)
+        var test = prompt('Enter extra info of point', 'WIP Please Cancel')
           // Do marker specific actions
       }
       if (type === 'polyline'){
@@ -533,7 +599,7 @@
         console.log(childData.mapLayer)
         jsonlayer = L.geoJson(childData.mapLayer, {
           onEachFeature: function (feature, layer) {
-            layer.bindPopup('<div>Name:' + childData.name + '</div>');
+            layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
           }
         }).addTo(map);
         lcontrol.addOverlay(jsonlayer, key);
@@ -543,15 +609,15 @@
     query.once("value")
       .then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-        // key will be "ada" the first time and "alan" the second time
+        // key will be layer name
         var key = childSnapshot.key;
         console.log(key)
-        // childData will be the actual contents of the child
+        // childData will be the actual contents of the child (GeoJSON)
         var childData = childSnapshot.val();
         console.log(childData.mapLayer)
         jsonlayer = L.geoJson(childData.mapLayer, {
           onEachFeature: function (feature, layer) {
-            layer.bindPopup('<div>Test data</div>');
+            layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
           }
         }).addTo(map);
         lcontrol.addOverlay(jsonlayer, key);
@@ -559,5 +625,58 @@
     });
     toastr.success('Successfully retrieved all data layers linked with account <%= user.username %>', 'Success!', {timeOut: 2000});
   }
+
+    //Populate dropdown for layer deletion
+    //
+    function populateDeleteSelect(){
+      var sel = document.getElementById('selectMarker');
+      for(var i = 0; i < layerMarker.length; i++) {
+      console.log(layerMarker[i])
+      var opt = document.createElement('option');
+      opt.innerHTML = layerMarker[i];
+      opt.value = layerMarker[i];
+      sel.appendChild(opt);
+      }
+      var sel = document.getElementById('selectLine');
+      for(var i = 0; i < layerLine.length; i++) {
+      console.log(layerLine[i])
+      var opt = document.createElement('option');
+      opt.innerHTML = layerLine[i];
+      opt.value = layerLine[i];
+      sel.appendChild(opt);
+      }
+    }
+    function deleteLayerOnline(){
+      var layerSelected = document.getElementById("selectMarker");
+      var selectedTextM = layerSelected.options[layerSelected.selectedIndex].text;
+      var layerSelected = document.getElementById("selectLine");
+      var selectedTextL = layerSelected.options[layerSelected.selectedIndex].text;
+      console.log(selectedTextM);
+      console.log(selectedTextL);
+      if (selectedTextM != 'NIL'){
+        var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Markers/" + selectedTextM);
+        query.remove().then(function(){
+          console.log("Remove successful")
+          toastr.success('Successfully removed layer ' + selectedTextM + ' from <%= user.username %>', 'Success!', {timeOut: 4000});
+          window.location.reload();
+        })
+        .catch(function(error){
+          console.log("Remove failed: " + error.message)
+        })
+      }
+      if (selectedTextL != 'NIL'){
+        var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Lines/" + selectedTextL);
+        query.remove().then(function(){
+          console.log("Remove successful")
+          toastr.success('Successfully removed layer ' + selectedTextL + ' from <%= user.username %>', 'Success!', {timeOut: 4000});
+          window.location.reload();
+        })
+        .catch(function(error){
+          console.log("Remove failed: " + error.message)
+        })
+      }
+      }
+    }
 </script>
+
 </html>
