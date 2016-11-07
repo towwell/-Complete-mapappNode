@@ -390,6 +390,10 @@
   var drawnLines = new L.FeatureGroup();
   map.addLayer(drawnLines);
 
+  var myIcon = L.icon({
+    iconUrl: 'images/marker-icon-old.png'
+});
+
   var drawControl = new L.Control.Draw({
     position: 'topright',
     draw: {
@@ -398,7 +402,7 @@
         rectangle: false,
         circle: false,
         marker: {
-            color: 'green'
+              icon: myIcon         
         }
     },
     edit: {
@@ -698,6 +702,7 @@
         jsonlayer = L.geoJson(childData.mapLayer, {
           onEachFeature: function (feature, layer) {
             layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
+            //
           }
         }).addTo(map);
         lcontrol.addOverlay(jsonlayer, key);
