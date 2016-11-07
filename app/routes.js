@@ -20,7 +20,7 @@ module.exports = function(app, passport) {
 
 	// process the login form
 	app.post('/login', passport.authenticate('local-login', {
-            // successRedirect : '/mainmap', // redirect to the secure profile section
+            // successRedirect : '/adminmap', // redirect to the secure profile section
             failureRedirect : '/login', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
 	}),
@@ -35,7 +35,7 @@ module.exports = function(app, passport) {
       }
 
 			if (usernameLocal.includes("ADMIN-")) {
-				res.redirect('/mainmap');
+				res.redirect('/adminmap');
 			} else {
 				res.redirect('/usermap');
 			}
@@ -72,12 +72,12 @@ module.exports = function(app, passport) {
 	// =====================================
 	// MAIN MAP =========================
 	// =====================================
-	app.get('/mainmap', isLoggedIn, function(req, res) {
+	app.get('/adminmap', isLoggedIn, function(req, res) {
 
 		var usernameLocal = req.user.username;
 
 		if (usernameLocal.includes("ADMIN-")) {
-			res.render('mainmap.ejs', {
+			res.render('adminmap.ejs', {
 				user : req.user
 			});
 		} else {

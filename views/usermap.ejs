@@ -20,11 +20,8 @@
   <link rel="stylesheet" href="/stylesheets/leaflet.draw.css" />
 	<script src="/javascripts/leaflet.draw.js"></script>
 
-  <!-- json2 for stringify function -->
-  <script src="javascripts/json2.js"></script>
-
   <!-- html style -->
-  <link rel="stylesheet" href="/stylesheets/mainmap.css"/>
+  <link rel="stylesheet" href="/stylesheets/adminmap.css"/>
 
   <!-- bootstrap -->
   <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
@@ -42,21 +39,10 @@
   <script src="/javascripts/firebase.js"></script>
   <script src="/javascripts/firebase-app.js"></script>
   <script src="/javascripts/firebase-database.js"></script>
-
-  <!-- SHP to GeoJSON -->
-  <script src="/javascripts/proj4.js"></script>
-  <script src="/javascripts/jszip.js"></script>
-  <script src="/javascripts/jszip-utils.js"></script>
-  <!--[if IE]>
-  <script type="text/javascript" src="/javascripts/jszip-utils-ie.js"></script>
-  <![endif]-->
-  <script src="/javascripts/preprocess.js"></script>
-  <script src="/javascripts/preview.js"></script>
-
 </head>
-<body>
+<body onload="retrieveUserData()">
   <!-- NavBar Start -->
-  <nav class="navbar navbar-inverse" id="navbar">
+  <nav class="navbar navbar-default" id="navbar">
     <div class="container-fluid" style="padding-right: 0;">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -96,11 +82,12 @@
     </div>
   </nav>
 
+
   <!-- map div -->
   <div id='map'></div>
 
   <!-- Init map JS last after "map" div -->
-  <script src="/javascripts/mainmap.js"></script>
+  <script src="/javascripts/adminmap.js"></script>
 </body>
 <script>
 
@@ -109,7 +96,7 @@
   /////////////////////////////////////////////////////////////
   var config = {
     apiKey: "AIzaSyBidD56QDaYhdtyNGS-rWhSzSfmzIWSmNk",
-    authDomain: "awesome-93639.firebaseapp.com",
+    authDo: "awesome-93639.firebaseapp.com",
     databaseURL: "https://awesome-93639.firebaseio.com",
     storageBucket: "awesome-93639.appspot.com",
     messagingSenderId: "900291118172"
@@ -204,12 +191,8 @@
     query.once("value")
       .then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-        // key will be "ada" the first time and "alan" the second time
         var key = childSnapshot.key;
-        console.log(key)
-        // childData will be the actual contents of the child
         var childData = childSnapshot.val();
-        console.log(childData.mapLayer)
         jsonlayer = L.geoJson(childData.mapLayer, {
           onEachFeature: function (feature, layer) {
             layer.bindPopup('<div>Name:' + childData.name + '</div>');
@@ -222,12 +205,8 @@
     query.once("value")
       .then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-        // key will be "ada" the first time and "alan" the second time
         var key = childSnapshot.key;
-        console.log(key)
-        // childData will be the actual contents of the child
         var childData = childSnapshot.val();
-        console.log(childData.mapLayer)
         jsonlayer = L.geoJson(childData.mapLayer, {
           onEachFeature: function (feature, layer) {
             layer.bindPopup('<div>Test data</div>');
