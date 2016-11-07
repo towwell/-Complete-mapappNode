@@ -26,7 +26,6 @@ module.exports = function(app, passport) {
 	}),
 		// runs if login success
   	function(req, res) {
-			console.log(req.user.username);
 			var usernameLocal = req.user.username;
 
       if (req.body.remember) {
@@ -74,9 +73,17 @@ module.exports = function(app, passport) {
 	// MAIN MAP =========================
 	// =====================================
 	app.get('/mainmap', isLoggedIn, function(req, res) {
-		res.render('mainmap.ejs', {
-			user : req.user
-		});
+
+		var usernameLocal = req.user.username;
+
+		if (usernameLocal.includes("ADMIN-")) {
+			res.render('mainmap.ejs', {
+				user : req.user
+			});
+		} else {
+			res.redirect('/usermap');
+		}
+
 	});
 
 	// =====================================
