@@ -172,6 +172,31 @@
               </div>
             </div>
             <!-- Hidden modal -->
+            <div class="modal fade" id="saveImportModalMarker">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Save online attributes</h4>
+                  </div>
+                  <div class="modal-body" id="modalbody">
+                    <div class="form-group">
+                      <label class="control-label" for="focusedInput">Description</label>
+                      <input class="form-control" id="descriptionInputGeoM" type="text" value="A description">
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label" for="focusedInput">Extra information</label>
+                      <input class="form-control" id="extraInputGeoM" type="text" value="*Optional*">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="saveImportMarkerData()">Save</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Hidden modal -->
             <div class="modal fade" id="saveOnlineModalLine">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -196,6 +221,31 @@
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <a type="button" class="btn btn-success" data-dismiss="modal" onclick="writeLineData()">Save</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Hidden modal -->
+            <div class="modal fade" id="saveImportModalLine">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Save online attributes</h4>
+                  </div>
+                  <div class="modal-body" id="modalbody">
+                    <div class="form-group">
+                      <label class="control-label" for="focusedInput">Description</label>
+                      <input class="form-control" id="descriptionInputGeoL" type="text" value="A description">
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label" for="focusedInput">Extra information</label>
+                      <input class="form-control" id="extraInputGeoL" type="text" value="*Optional*">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="saveImportLineData()">Save</a>
                   </div>
                 </div>
               </div>
@@ -450,8 +500,9 @@
 
   //Upload JSON
   //
+  var uploadJSONName;
   var loadFile = function(event) {
-    var uploadJSONName = prompt("JSON Layer name.");
+    uploadJSONName = prompt("JSON Layer name.");
     if (uploadJSONName != null) {
       var input = event.target;
       var reader = new FileReader();
@@ -462,13 +513,27 @@
         // parse file to JSON object
         var jsonObject = reader.result;
         var json = JSON.parse(jsonObject);
+        var type;
         jsonlayer = L.geoJson(json, {
           onEachFeature: function (feature, layer) {
             layer.bindPopup(feature.properties.name);
+            type = feature.geometry.type;
+            console.log(type);
           }
         }).addTo(map);
         lcontrol.addOverlay(jsonlayer, uploadJSONName);
-        toastr.success('Successfully imported JSON/GeoJSON file!', 'Success!', {timeOut: 2000});
+
+        if (confirm("Save to firebase?") == true) {
+          if (type == "Point"){
+            $('#saveImportModalMarker').modal('show')
+          }
+          if (type == "LineString"){
+            $('#saveImportModalLine').modal('show')
+          }
+          } 
+        else {
+          toastr.success('Successfully imported JSON/GeoJSON file!', 'Success!', {timeOut: 3000});
+        }
       };
     } else {
       if (uploadJSONName == "" || uploadJSONName == null) {
@@ -478,6 +543,7 @@
       }
     }
   };
+
   //Upload SHP
   //
   function uploadSHP() {
@@ -536,6 +602,22 @@
     }
   }
 
+  //Write imported markers to database
+  //
+  function saveImportMarkerData(){
+    var datatype = 'Markers';
+        var now = new Date();
+        var jsonlayerNew = jsonlayer.toGeoJSON();
+        firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + uploadJSONName).set({            
+          mapLayer: jsonlayerNew,
+          timeEdited: now.toString(),
+          name: uploadJSONName,
+          description: document.getElementById('descriptionInputGeoM').value,
+          extraInfo: document.getElementById('extraInputGeoM').value
+          });
+        toastr.success('Successfully saved to database!', 'Success!', {timeOut: 2000});
+  }
+
   //Write custom markers to database
   //
   function writeMarkerData() {
@@ -557,6 +639,22 @@
         });
         toastr.success('Successfully saved to database!', 'Success!', {timeOut: 2000});
       }
+  }
+
+  //Write imported lines to database
+  //
+  function saveImportLineData(){
+    var datatype = 'Lines';
+        var now = new Date();
+        var jsonlayerNew = jsonlayer.toGeoJSON();
+        firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + uploadJSONName).set({            
+          mapLayer: jsonlayerNew,
+          timeEdited: now.toString(),
+          name: uploadJSONName,
+          description: document.getElementById('descriptionInputGeoL').value,
+          extraInfo: document.getElementById('extraInputGeoL').value
+          });
+        toastr.success('Successfully saved to database!', 'Success!', {timeOut: 2000});
   }
 
   //Write custom lines to database
