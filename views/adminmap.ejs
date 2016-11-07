@@ -21,6 +21,11 @@
   <link rel="stylesheet" href="/stylesheets/leaflet.draw.css" />
   <script src="/javascripts/leaflet.draw.js"></script>
 
+  <!-- leaflet cluster -->
+  <link rel="stylesheet" href="/stylesheets/MarkerCluster.css" />
+  <link rel="stylesheet" href="/stylesheets/MarkerCluster.Default.css" />
+  <script src="/javascripts/leaflet.markercluster.js"></script>
+
   <!-- json2 for stringify function -->
   <script src="javascripts/json2.js"></script>
 
@@ -380,9 +385,6 @@
     layers: [current]
   });
 
-  // SHP to GeoJSON
-  vector = L.geoJson().addTo(map);
-
   //Drawn items layer init
   var drawnItems = new L.FeatureGroup();
   map.addLayer(drawnItems);
@@ -402,7 +404,7 @@
         rectangle: false,
         circle: false,
         marker: {
-              icon: myIcon         
+              icon: myIcon
         }
     },
     edit: {
@@ -522,11 +524,17 @@
           onEachFeature: function (feature, layer) {
             layer.bindPopup(feature.properties.name);
             type = feature.geometry.type;
-            console.log(type);
           }
-        }).addTo(map);
-        lcontrol.addOverlay(jsonlayer, uploadJSONName);
+        });
 
+        //save points as clusters to reduce lag
+        var markersJSON = L.markerClusterGroup();
+        markersJSON.addLayer(jsonlayer);
+        map.addLayer(markersJSON);
+
+        lcontrol.addOverlay(markersJSON, uploadJSONName);
+
+        //save to firebase
         if (confirm("Save to firebase?") == true) {
           if (type == "Point"){
             $('#saveImportModalMarker').modal('show')
@@ -534,7 +542,7 @@
           if (type == "LineString"){
             $('#saveImportModalLine').modal('show')
           }
-          } 
+        }
         else {
           toastr.success('Successfully imported JSON/GeoJSON file!', 'Success!', {timeOut: 3000});
         }
@@ -554,15 +562,17 @@
     var uploadSHPName = prompt("SHP Layer name.");
     var x = document.getElementById("uploadSHP");
     var file = x.files[0];
+    var markersSHP = L.markerClusterGroup();
     if (uploadSHPName != null) {
       loadshp({
           url: file,
           encoding: 'big5',
           EPSG: 3826
       }, function(data) {
-          vector.addData(data);
-          map.fitBounds(vector.getBounds());
-          lcontrol.addOverlay(vector, uploadSHPName);
+          vector = L.geoJson(data);
+          markersSHP.addLayer(vector);
+          map.addLayer(markersSHP);
+          lcontrol.addOverlay(markersSHP, uploadSHPName);
           toastr.success('Successfully imported SHP file!', 'Success!', {timeOut: 2000});
       });
     } else {
@@ -612,7 +622,7 @@
     var datatype = 'Markers';
         var now = new Date();
         var jsonlayerNew = jsonlayer.toGeoJSON();
-        firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + uploadJSONName).set({            
+        firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + uploadJSONName).set({
           mapLayer: jsonlayerNew,
           timeEdited: now.toString(),
           name: uploadJSONName,
@@ -651,7 +661,7 @@
     var datatype = 'Lines';
         var now = new Date();
         var jsonlayerNew = jsonlayer.toGeoJSON();
-        firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + uploadJSONName).set({            
+        firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + uploadJSONName).set({
           mapLayer: jsonlayerNew,
           timeEdited: now.toString(),
           name: uploadJSONName,
@@ -704,8 +714,13 @@
             layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
             //
           }
-        }).addTo(map);
-        lcontrol.addOverlay(jsonlayer, key);
+        });
+        //save points as clusters to reduce lag
+        var markersJSON = L.markerClusterGroup();
+        markersJSON.addLayer(jsonlayer);
+        map.addLayer(markersJSON);
+
+        lcontrol.addOverlay(markersJSON, key);
       });
     });
     var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Lines/");
@@ -722,7 +737,7 @@
           onEachFeature: function (feature, layer) {
             layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
           }
-        }).addTo(map);
+        });
         lcontrol.addOverlay(jsonlayer, key);
       });
     });

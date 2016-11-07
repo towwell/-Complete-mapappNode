@@ -20,6 +20,11 @@
   <link rel="stylesheet" href="/stylesheets/leaflet.draw.css" />
 	<script src="/javascripts/leaflet.draw.js"></script>
 
+  <!-- leaflet cluster -->
+  <link rel="stylesheet" href="/stylesheets/MarkerCluster.css" />
+  <link rel="stylesheet" href="/stylesheets/MarkerCluster.Default.css" />
+  <script src="/javascripts/leaflet.markercluster.js"></script>
+
   <!-- html style -->
   <link rel="stylesheet" href="/stylesheets/adminmap.css"/>
 
@@ -186,32 +191,44 @@
 
   //Retrieve markers from database
   //
+  //Retrieve markers from database
+  //
   function retrieveUserData() {
     var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Markers/");
     query.once("value")
       .then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
+        // key will be "ada" the first time and "alan" the second time
         var key = childSnapshot.key;
+        // childData will be the actual contents of the child
         var childData = childSnapshot.val();
         jsonlayer = L.geoJson(childData.mapLayer, {
           onEachFeature: function (feature, layer) {
-            layer.bindPopup('<div>Name:' + childData.name + '</div>');
+            layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
+            //
           }
-        }).addTo(map);
-        lcontrol.addOverlay(jsonlayer, key);
+        });
+        //save points as clusters to reduce lag
+        var markersJSON = L.markerClusterGroup();
+        markersJSON.addLayer(jsonlayer);
+        map.addLayer(markersJSON);
+
+        lcontrol.addOverlay(markersJSON, key);
       });
     });
     var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Lines/");
     query.once("value")
       .then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
+        // key will be layer name
         var key = childSnapshot.key;
+        // childData will be the actual contents of the child (GeoJSON)
         var childData = childSnapshot.val();
         jsonlayer = L.geoJson(childData.mapLayer, {
           onEachFeature: function (feature, layer) {
-            layer.bindPopup('<div>Test data</div>');
+            layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
           }
-        }).addTo(map);
+        });
         lcontrol.addOverlay(jsonlayer, key);
       });
     });
