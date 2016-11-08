@@ -131,7 +131,7 @@
           </li>
           <!-- Download dropdown -->
           <li class="dropdown navbarStyle">
-            <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #df691a">Download Layer <span class="caret"></span></a>
+            <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #df691a">Download Drawn Layers <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a id="downloadPoints" class="dropdownStyle" onclick="downloadPointsJSON()">Download <b>points</b> layer</a></li>
               <li class="divider"></li>
@@ -140,7 +140,7 @@
           </li>
           <!-- Save online -->
           <li class="dropdown navbarStyle">
-            <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #f0ad4e">Save Online  <span class="caret"></span></a>
+            <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #f0ad4e">Save Drawn Layers Online  <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <!-- <li><a class="dropdownStyle" onclick="writeMarkerData()">Save <b>points</b></a></li> -->
               <li><a class="dropdownStyle" data-target="#saveOnlineModalMarker" data-toggle="modal" id="navbarStyle">Save drawn <b>Markers</b></a></li>
@@ -257,7 +257,7 @@
             </div>
           </li>
           <!--Retrieve from firebase -->
-          <li class="navbarStyle"><a class="btn btn-info" data-target="#retrieveModal" data-toggle="modal" id="navbarStyle">Download from Online</a></li>
+          <li class="navbarStyle"><a class="btn btn-info" data-target="#retrieveModal" data-toggle="modal" id="navbarStyle">Load Online Layers</a></li>
           <!-- Hidden Modal -->
           <div class="modal fade" id="retrieveModal">
             <div class="modal-dialog">
@@ -277,7 +277,7 @@
             </div>
           </div>
           <!-- Delete from firebase -->
-          <li class="navbarStyle"><a class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" id="navbarStyle" onclick="populateDeleteSelect()">Delete layer from Online</a></li>
+          <li class="navbarStyle"><a class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" id="navbarStyle" onclick="populateDeleteSelect()">Delete Online Layers</a></li>
           <!-- Hidden Modal -->
           <div class="modal fade" id="deleteModal">
             <div class="modal-dialog">
