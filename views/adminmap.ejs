@@ -290,14 +290,12 @@
                   <div class="form-group">
                     <label for="select" class="col-lg-2 control-label">Markers</label>
                     <select class="form-control" id="selectMarker">
-                      <option>NIL</option>
                       </select>
                     <br>
                   </div>
                   <div class="form-group">
                     <label for="select" class="col-lg-2 control-label">Lines</label>
                     <select class="form-control" id="selectLine">
-                      <option>NIL</option>
                       </select>
                     <br>
                   </div>
@@ -744,9 +742,28 @@
     toastr.success('Successfully retrieved all data layers linked with account <%= user.username %>', 'Success!', {timeOut: 2000});
   }
 
+    function removeOptions(selectbox)
+    {
+     var i;
+        for(i = selectbox.options.length - 1 ; i >= 0 ; i--)
+        {
+            selectbox.remove(i);
+        }
+    }
+
+
     //Populate dropdown for layer deletion
     //
     function populateDeleteSelect(){
+      //Deleting all entries from dropdown
+      removeOptions(document.getElementById("selectMarker"));
+      var select = document.getElementById("selectMarker");
+      select.options[select.options.length] = new Option('NIL', 'NIL');
+
+      removeOptions(document.getElementById("selectLine"));
+      var select = document.getElementById("selectLine");
+      select.options[select.options.length] = new Option('NIL', 'NIL');
+
       var sel = document.getElementById('selectMarker');
       for(var i = 0; i < layerMarker.length; i++) {
       console.log(layerMarker[i])
