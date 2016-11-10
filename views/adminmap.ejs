@@ -59,6 +59,10 @@
   <script src="/javascripts/preprocess.js"></script>
   <script src="/javascripts/preview.js"></script>
 
+  <!-- Bootstrap Select -->
+  <link rel="stylesheet" href="/stylesheets/bootstrap-select.min.css" />
+  <script src="/javascripts/bootstrap-select.min.js"></script>
+
   <script>
   /////////////////////////////////////////////////////////////
   // INIT FIREBASE
@@ -303,6 +307,54 @@
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                   <a type="button" class="btn btn-success" data-dismiss="modal" onclick="deleteLayerOnline()">Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--Save to user -->
+          <li class="navbarStyle"><a class="btn btn" data-target="#saveUserModal" data-toggle="modal" id="navbarStyle" onclick="populateSaveUserSelect()" style="background-color: #BA68C8">Assign To User</a></li>
+          <!-- Hidden Modal -->
+          <div class="modal fade" id="saveUserModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Modify user data set access</h4>
+                </div>
+                <div class="modal-body" id="modalbody">
+                  <form class="form-horizontal">
+                    <fieldset>
+                      <div class="form-group">
+                        <label for="inputUser" class="col-lg-2 control-label">User(s)</label>
+                        <select id="inputUser" class="selectpicker" data-style="btn-info" data-live-search="true" data-size="5" multiple>
+                          <option>public</option>
+                          <option>a12341</option>
+                          <option>a12342</option>
+                          <option>a12343</option>
+                          <option>a12344</option>
+                          <option>a12345</option>
+                          <option>a12346</option>
+                          <option>a12347</option>
+                          <option>a12348</option>
+                          <option>a12349</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="inputMarker" class="col-lg-2 control-label">Marker(s)</label>
+                        <select id="inputMarker" class="selectpicker" data-live-search="true" data-size="5" multiple>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="inputLine" class="col-lg-2 control-label">Line(s)</label>
+                        <select id="inputLine" class="selectpicker" data-live-search="true" data-size="5" multiple>
+                        </select>
+                      </div>
+                    </fieldset>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <a type="button" class="btn btn" data-dismiss="modal" onclick="" style="background-color: #BA68C8; color: white">Assign</a>
                 </div>
               </div>
             </div>
@@ -751,7 +803,6 @@
         }
     }
 
-
     //Populate dropdown for layer deletion
     //
     function populateDeleteSelect(){
@@ -781,6 +832,32 @@
       sel.appendChild(opt);
       }
     }
+
+    function populateSaveUserSelect(){
+
+      //Deleting all entries from dropdown
+      removeOptions(document.getElementById("inputMarker"));
+
+      removeOptions(document.getElementById("inputLine"));
+
+      var sel = document.getElementById('inputMarker');
+      for(var i = 0; i < layerMarker.length; i++) {
+        console.log("test1");
+
+        var opt = document.createElement('option');
+        opt.innerHTML = layerMarker[i];
+        opt.value = layerMarker[i];
+        sel.appendChild(opt);
+      }
+      var sel1 = document.getElementById('inputLine');
+      for(var i = 0; i < layerLine.length; i++) {
+        var opt = document.createElement('option');
+        opt.innerHTML = layerLine[i];
+        opt.value = layerLine[i];
+        sel1.appendChild(opt);
+      }
+    }
+
     function deleteLayerOnline(){
       var layerSelected = document.getElementById("selectMarker");
       var selectedTextM = layerSelected.options[layerSelected.selectedIndex].text;
