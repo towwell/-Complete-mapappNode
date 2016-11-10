@@ -21,6 +21,10 @@
   <link rel="stylesheet" href="/stylesheets/leaflet.draw.css" />
   <script src="/javascripts/leaflet.draw.js"></script>
 
+  <!-- leaflet search -->
+  <link rel="stylesjeet" href="/stylesheets/Control.Geocoder.css" />
+  <script src="/javascripts/Control.Geocoder.js"></script>
+
   <!-- leaflet cluster -->
   <link rel="stylesheet" href="/stylesheets/MarkerCluster.css" />
   <link rel="stylesheet" href="/stylesheets/MarkerCluster.Default.css" />
@@ -486,6 +490,8 @@
       }
   });
   map.addControl(drawControl2);
+
+  L.Control.geocoder().addTo(map);
 
   customMarker = L.Marker
 
