@@ -25,6 +25,10 @@
   <link rel="stylesheet" href="/stylesheets/MarkerCluster.Default.css" />
   <script src="/javascripts/leaflet.markercluster.js"></script>
 
+  <!-- leaflet search -->
+  <link rel="stylesheet" href="/stylesheets/leaflet-geocoder-mapzen.css">
+  <script src="/javascripts/leaflet-geocoder-mapzen.js"></script>
+
   <!-- html style -->
   <link rel="stylesheet" href="/stylesheets/adminmap.css"/>
 
@@ -148,8 +152,23 @@
     layers: [current]
   });
 
-  // SHP to GeoJSON
-  vector = L.geoJson().addTo(map);
+  // Geocoder(AKA search)
+  var geocodeIcon = L.icon({
+    iconUrl: 'images/123.png',
+    iconSize: [50, 50],
+    popupAnchor: [-6, -21]
+  });
+
+  // Geocoder(AKA search)
+  L.control.geocoder('mapzen-t21iVV1', {
+    panToPoint: true,
+    params: {
+      'boundary.country': 'SG'
+    },
+    markers: {
+        icon: geocodeIcon
+    }
+  }).addTo(map);
 
   //Basemap configs
   var baseMaps = {

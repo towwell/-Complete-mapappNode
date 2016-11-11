@@ -63,3 +63,11 @@ body {
 span {
   font-size: 14px;
 }
+
+.leaflet-pelias-message {
+  color: black !important;
+}
+
+.leaflet-pelias-result {
+  color: black !important;
+}

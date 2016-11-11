@@ -21,14 +21,14 @@
   <link rel="stylesheet" href="/stylesheets/leaflet.draw.css" />
   <script src="/javascripts/leaflet.draw.js"></script>
 
-  <!-- leaflet search -->
-  <link rel="stylesjeet" href="/stylesheets/Control.Geocoder.css" />
-  <script src="/javascripts/Control.Geocoder.js"></script>
-
   <!-- leaflet cluster -->
   <link rel="stylesheet" href="/stylesheets/MarkerCluster.css" />
   <link rel="stylesheet" href="/stylesheets/MarkerCluster.Default.css" />
   <script src="/javascripts/leaflet.markercluster.js"></script>
+
+  <!-- leaflet search -->
+  <link rel="stylesheet" href="/stylesheets/leaflet-geocoder-mapzen.css">
+  <script src="/javascripts/leaflet-geocoder-mapzen.js"></script>
 
   <!-- json2 for stringify function -->
   <script src="javascripts/json2.js"></script>
@@ -439,6 +439,23 @@
     layers: [current]
   });
 
+  var geocodeIcon = L.icon({
+    iconUrl: 'images/123.png',
+    iconSize: [50, 50],
+    popupAnchor: [-6, -21]
+  });
+
+  // Geocoder(AKA search)
+  L.control.geocoder('mapzen-t21iVV1', {
+    panToPoint: true,
+    params: {
+      'boundary.country': 'SG'
+    },
+    markers: {
+        icon: geocodeIcon
+    }
+  }).addTo(map);
+
   //Drawn items layer init
   var drawnItems = new L.FeatureGroup();
   map.addLayer(drawnItems);
@@ -447,8 +464,9 @@
   map.addLayer(drawnLines);
 
   var myIcon = L.icon({
-    iconUrl: 'images/marker-icon-old.png'
-});
+    iconUrl: 'images/marker-icon-old.png',
+    shadowUrl: 'images/marker-shadow.png'
+  });
 
   var drawControl = new L.Control.Draw({
     position: 'topright',
@@ -490,8 +508,6 @@
       }
   });
   map.addControl(drawControl2);
-
-  L.Control.geocoder().addTo(map);
 
   customMarker = L.Marker
 
@@ -861,6 +877,7 @@
         opt.value = layerLine[i];
         sel1.appendChild(opt);
       }
+      $('.selectpicker').selectpicker('refresh');
     }
 
     function deleteLayerOnline(){
