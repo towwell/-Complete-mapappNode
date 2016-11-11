@@ -331,12 +331,12 @@
                       <div class="form-group">
                         <label for="inputUser" class="col-lg-2 control-label">User(s)</label>
                         <select id="inputUser" class="selectpicker" data-style="btn-info" data-live-search="true" data-size="5" multiple>
-                          <option>public</option>
+                          <option value="1">public</option>
                           <option>a12341</option>
                           <option>a12342</option>
                           <option>a12343</option>
                           <option>a12344</option>
-                          <option>a12345</option>
+                          <option value="2">a12345</option>
                           <option>a12346</option>
                           <option>a12347</option>
                           <option>a12348</option>
@@ -358,7 +358,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <a type="button" class="btn btn" data-dismiss="modal" onclick="" style="background-color: #BA68C8; color: white">Assign</a>
+                  <a type="button" id="editButton" class="btn btn" data-dismiss="modal" onclick="assignToUser()" style="background-color: #BA68C8; color: white">Assign</a>
                 </div>
               </div>
             </div>
@@ -909,6 +909,70 @@
           console.log("Remove failed: " + error.message)
         })
       }
+      }
+      var selected = [];
+
+      $(document).ready(function() {
+        $("#editButton").click(function(){
+          $.each($("#inputUser option:selected"), function(){            
+              selected.push($(this).val());
+          });
+          });
+      });
+
+      function assignToUser(){
+        var selectedMarker = document.getElementById('inputMarker')
+        var selectedLine = document.getElementById('inputLine')
+
+        if(selectedMarker.value != null){
+        var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Markers/");
+        query.once("value")
+          .then(function(snapshot){
+            var nameM = snapshot.child(selectedMarker.value + "/name").val();
+            console.log(nameM)
+            var descriptionM = snapshot.child(selectedMarker.value + "/description").val();
+            var extraInfoM = snapshot.child(selectedMarker.value + "/extraInfo").val();
+            var timeEditedM = snapshot.child(selectedMarker.value + "/timeEdited").val();
+            var mapLayerM = snapshot.child(selectedMarker.value + "/mapLayer").val();
+
+            for (i = 0; i < selected.length; i++) { 
+            firebase.database().ref('Users/' + selected[i] + '/Markers/' + nameM).set({
+                mapLayer: mapLayerM,
+                timeEdited: timeEditedM,
+                name: nameM,
+                description: descriptionM,
+                extraInfo: extraInfoM
+              });
+            }
+          })
+          toastr.success('Successfully saved markers to database!', 'Success!', {timeOut: 2000});
+        }
+
+        if(selectedLine.value != null){
+        var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Lines/");
+        query.once("value")
+          .then(function(snapshot){      
+            var nameL = snapshot.child(selectedMarker.value + "/name").val();
+            console.log(nameL)
+            var descriptionL = snapshot.child(selectedMarker.value + "/description").val();
+            var extraInfoL = snapshot.child(selectedMarker.value + "/extraInfo").val();
+            var timeEditedL = snapshot.child(selectedMarker.value + "/timeEdited").val();
+            var mapLayerL = snapshot.child(selectedMarker.value + "/mapLayer").val();
+
+            for (i = 0; i < selected.length; i++) { 
+              firebase.database().ref('Users/' + selected[i] + '/Lines/' + nameL).set({
+                mapLayer: mapLayerL,
+                timeEdited: timeEditedL,
+                name: nameL,
+                description: descriptionL,
+                extraInfo: extraInfoL
+                });
+            }
+          })
+          toastr.success('Successfully saved Lines to database!', 'Success!', {timeOut: 2000});
+        }
+
+       
       }
 </script>
 </html>
