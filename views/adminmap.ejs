@@ -2,977 +2,1143 @@
 <html>
 
 <head>
-  <meta charset='utf-8' />
-  <title>Main Map</title>
-  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <meta charset='utf-8' />
+    <title>Main Map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
-  <!-- jquery -->
-  <script src="/javascripts/jquery-3.1.1.min.js"></script>
+    <!-- jquery -->
+    <script src="/javascripts/jquery-3.1.1.min.js"></script>
 
-  <!-- mapbox gl -->
-  <script src='/javascripts/mapbox-gl.js'></script>
-  <link rel='stylesheet' href='/stylesheets/mapbox-gl.css' />
+    <!-- mapbox gl -->
+    <script src='/javascripts/mapbox-gl.js'></script>
+    <link rel='stylesheet' href='/stylesheets/mapbox-gl.css' />
 
-  <!-- leaflet -->
-  <link rel="stylesheet" href="/stylesheets/leaflet.css" />
-  <script src="/javascripts/leaflet.js"></script>
+    <!-- leaflet -->
+    <link rel="stylesheet" href="/stylesheets/leaflet.css" />
+    <script src="/javascripts/leaflet.js"></script>
 
-  <!-- leaflet draw -->
-  <link rel="stylesheet" href="/stylesheets/leaflet.draw.css" />
-  <script src="/javascripts/leaflet.draw.js"></script>
+    <!-- leaflet draw -->
+    <link rel="stylesheet" href="/stylesheets/leaflet.draw.css" />
+    <script src="/javascripts/leaflet.draw.js"></script>
 
-  <!-- leaflet cluster -->
-  <link rel="stylesheet" href="/stylesheets/MarkerCluster.css" />
-  <link rel="stylesheet" href="/stylesheets/MarkerCluster.Default.css" />
-  <script src="/javascripts/leaflet.markercluster.js"></script>
+    <!-- leaflet cluster -->
+    <link rel="stylesheet" href="/stylesheets/MarkerCluster.css" />
+    <link rel="stylesheet" href="/stylesheets/MarkerCluster.Default.css" />
+    <script src="/javascripts/leaflet.markercluster.js"></script>
 
-  <!-- leaflet search -->
-  <link rel="stylesheet" href="/stylesheets/leaflet-geocoder-mapzen.css">
-  <script src="/javascripts/leaflet-geocoder-mapzen.js"></script>
+    <!-- leaflet search -->
+    <link rel="stylesheet" href="/stylesheets/leaflet-geocoder-mapzen.css">
+    <script src="/javascripts/leaflet-geocoder-mapzen.js"></script>
 
-  <!-- json2 for stringify function -->
-  <script src="javascripts/json2.js"></script>
+    <!-- json2 for stringify function -->
+    <script src="javascripts/json2.js"></script>
 
-  <!-- html style -->
-  <link rel="stylesheet" href="/stylesheets/adminmap.css" />
+    <!-- html style -->
+    <link rel="stylesheet" href="/stylesheets/adminmap.css" />
 
-  <!-- bootstrap -->
-  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
-  <link rel="stylesheet" href="/stylesheets/superhero-bootstrap.min.css" />
-  <script src="/javascripts/bootstrap.min.js"></script>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/superhero-bootstrap.min.css" />
+    <script src="/javascripts/bootstrap.min.js"></script>
 
-  <!-- Material Icon -->
-  <link rel="stylesheet" href="/stylesheets/icon.css" />
+    <!-- Material Icon -->
+    <link rel="stylesheet" href="/stylesheets/icon.css" />
 
-  <!-- Toastr -->
-  <link rel="stylesheet" href="/stylesheets/toastr.min.css" />
-  <script src="/javascripts/toastr.min.js"></script>
+    <!-- Toastr -->
+    <link rel="stylesheet" href="/stylesheets/toastr.min.css" />
+    <script src="/javascripts/toastr.min.js"></script>
 
-  <!-- Firebase database stuff -->
-  <script src="/javascripts/firebase.js"></script>
-  <script src="/javascripts/firebase-app.js"></script>
-  <script src="/javascripts/firebase-database.js"></script>
+    <!-- Firebase database stuff -->
+    <script src="/javascripts/firebase.js"></script>
+    <script src="/javascripts/firebase-app.js"></script>
+    <script src="/javascripts/firebase-database.js"></script>
 
-  <!-- SHP to GeoJSON -->
-  <script src="/javascripts/proj4.js"></script>
-  <script src="/javascripts/jszip.js"></script>
-  <script src="/javascripts/jszip-utils.js"></script>
-  <!--[if IE]>
+    <!-- SHP to GeoJSON -->
+    <script src="/javascripts/proj4.js"></script>
+    <script src="/javascripts/jszip.js"></script>
+    <script src="/javascripts/jszip-utils.js"></script>
+    <!--[if IE]>
   <script type="text/javascript" src="/javascripts/jszip-utils-ie.js"></script>
   <![endif]-->
-  <script src="/javascripts/preprocess.js"></script>
-  <script src="/javascripts/preview.js"></script>
+    <script src="/javascripts/preprocess.js"></script>
+    <script src="/javascripts/preview.js"></script>
 
-  <!-- Bootstrap Select -->
-  <link rel="stylesheet" href="/stylesheets/bootstrap-select.min.css" />
-  <script src="/javascripts/bootstrap-select.min.js"></script>
+    <!-- Bootstrap Select -->
+    <link rel="stylesheet" href="/stylesheets/bootstrap-select.min.css" />
+    <script src="/javascripts/bootstrap-select.min.js"></script>
 
-  <script>
-  /////////////////////////////////////////////////////////////
-  // INIT FIREBASE
-  /////////////////////////////////////////////////////////////
-  var config = {
-    apiKey: "AIzaSyBidD56QDaYhdtyNGS-rWhSzSfmzIWSmNk",
-    authDomain: "awesome-93639.firebaseapp.com",
-    databaseURL: "https://awesome-93639.firebaseio.com",
-    storageBucket: "awesome-93639.appspot.com",
-    messagingSenderId: "900291118172"
-  };
-  firebase.initializeApp(config);
-  var database = firebase.database();
+    <!-- JSON Editor -->
+    <link rel="stylesheet" href="/stylesheets/jsoneditor.css" />
+    <script src="/javascripts/jsoneditor.min.js"></script>
 
-  //Retrieve all layers of logged in user
-  //
-  var layerMarker = new Array();
-  var layerLine = new Array();
+    <script>
+    /////////////////////////////////////////////////////////////
+    // INIT FIREBASE
+    /////////////////////////////////////////////////////////////
+        var config = {
+            apiKey: "AIzaSyBidD56QDaYhdtyNGS-rWhSzSfmzIWSmNk",
+            authDomain: "awesome-93639.firebaseapp.com",
+            databaseURL: "https://awesome-93639.firebaseio.com",
+            storageBucket: "awesome-93639.appspot.com",
+            messagingSenderId: "900291118172"
+        };
+        firebase.initializeApp(config);
+        var database = firebase.database();
 
-  function updateDeleteLayer() {
-    var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Markers/");
-    query.once("value")
-      .then(function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-        // key will be layer name
-        var key = childSnapshot.key;
-        layerMarker.push(key)
-        })
-      })
-    var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Lines/");
-    query.once("value")
-      .then(function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-        // key will be layer name
-        var key = childSnapshot.key;
-        layerLine.push(key)
-        })
-      })
-  }
-  window.onload = updateDeleteLayer;
-  </script>
+        //Retrieve all layers of logged in user
+        //
+        var layerMarker = new Array();
+        var layerLine = new Array();
+
+        function updateDeleteLayer() {
+            var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
+            query.once("value")
+                .then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        // key will be layer name
+                        var key = childSnapshot.key;
+                        layerMarker.push(key)
+                    })
+                })
+            var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/");
+            query.once("value")
+                .then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        // key will be layer name
+                        var key = childSnapshot.key;
+                        layerLine.push(key)
+                    })
+                })
+        }
+        window.onload = updateDeleteLayer;
+    </script>
 
 </head>
 
 <body>
-  <!-- NavBar Start -->
-  <nav class="navbar navbar-default" id="navbar">
-    <div class="container-fluid" style="padding-right: 0;">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-          aria-expanded="false">
+    <!-- NavBar Start -->
+    <nav class="navbar navbar-default" id="navbar">
+        <div class="container-fluid" style="padding-right: 0;">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand center" id="title"><b>Leaflet Map</b></a>
-      </div>
-      <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
-        <!-- align left buttons -->
-        <ul class="nav navbar-nav" id="navbarItemGap">
-          <!-- Upload button, modal trigger -->
-          <li class="dropdown navbarStyle">
-            <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #5cb85c">Upload Layer <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><label class="btn dropdownStyle"><input id="uploadJSON" style="position: absolute; display: none;" type='file' accept='Json' onchange="loadFile(event)">Upload <b>JSON/GeoJSON</b></label></li>
-              <li class="divider"></li>
-              <li><label class="btn dropdownStyle"><input id="uploadSHP" style="position: absolute; display: none;" type='file' accept='application/zip' onchange="uploadSHP()">Upload <b>SHP</b></label></li>
-            </ul>
-          </li>
-          <!-- Download dropdown -->
-          <li class="dropdown navbarStyle">
-            <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #df691a">Download Drawn Layers <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a id="downloadPoints" class="dropdownStyle" onclick="downloadPointsJSON()">Download <b>points</b> layer</a></li>
-              <li class="divider"></li>
-              <li><a id="downloadLines" class="dropdownStyle" onclick="downloadLinesJSON()">Download <b>lines</b> layer</a></li>
-            </ul>
-          </li>
-          <!-- Save online -->
-          <li class="dropdown navbarStyle">
-            <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #f0ad4e">Save Drawn Layers Online  <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <!-- <li><a class="dropdownStyle" onclick="writeMarkerData()">Save <b>points</b></a></li> -->
-              <li><a class="dropdownStyle" data-target="#saveOnlineModalMarker" data-toggle="modal" id="navbarStyle">Save drawn <b>Markers</b></a></li>
-              <li class="divider"></li>
-              <li><a class="dropdownStyle" data-target="#saveOnlineModalLine" data-toggle="modal">Save drawn <b>lines</b></a></li>
-            </ul>
-            <!-- Hidden modal -->
-            <div class="modal fade" id="saveOnlineModalMarker">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Save online attributes</h4>
-                  </div>
-                  <div class="modal-body" id="modalbody">
-                    <div class="form-group">
-                      <label class="control-label" for="focusedInput">Layer Name</label>
-                      <input class="form-control" id="nameInputM" type="text" value="Map Layer">
-                    </div>
-                    <div class="form-group">
-                      <label class="control-label" for="focusedInput">Description</label>
-                      <input class="form-control" id="descriptionInputM" type="text" value="A description">
-                    </div>
-                    <div class="form-group">
-                      <label class="control-label" for="focusedInput">Extra information</label>
-                      <input class="form-control" id="extraInputM" type="text" value="*Optional*">
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="writeMarkerData()">Save</a>
-                  </div>
-                </div>
-              </div>
+                <a class="navbar-brand center" id="title"><b>Leaflet Map</b></a>
             </div>
-            <!-- Hidden modal -->
-            <div class="modal fade" id="saveImportModalMarker">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Save online attributes</h4>
-                  </div>
-                  <div class="modal-body" id="modalbody">
-                    <div class="form-group">
-                      <label class="control-label" for="focusedInput">Description</label>
-                      <input class="form-control" id="descriptionInputGeoM" type="text" value="A description">
+            <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
+                <!-- align left buttons -->
+                <ul class="nav navbar-nav" id="navbarItemGap">
+                    <!-- Upload button, modal trigger -->
+                    <li class="dropdown navbarStyle">
+                        <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #5cb85c">Upload Layer <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><label class="btn dropdownStyle"><input id="uploadJSON" style="position: absolute; display: none;" type='file' accept='Json' onchange="loadFile(event)">Upload <b>JSON/GeoJSON</b></label></li>
+                            <li class="divider"></li>
+                            <li><label class="btn dropdownStyle"><input id="uploadSHP" style="position: absolute; display: none;" type='file' accept='application/zip' onchange="uploadSHP()">Upload <b>SHP</b></label></li>
+                        </ul>
+                    </li>
+                    <!-- Download dropdown -->
+                    <li class="dropdown navbarStyle">
+                        <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #df691a">Download Drawn Layers <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a id="downloadPoints" class="dropdownStyle" onclick="downloadPointsJSON()">Download <b>points</b> layer</a></li>
+                            <li class="divider"></li>
+                            <li><a id="downloadLines" class="dropdownStyle" onclick="downloadLinesJSON()">Download <b>lines</b> layer</a></li>
+                        </ul>
+                    </li>
+                    <!-- Save online -->
+                    <li class="dropdown navbarStyle">
+                        <a class="dropdown-toggle navbarStyle" data-toggle="dropdown" role="button" aria-expanded="false" style="background-color: #f0ad4e">Save Drawn Layers Online  <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <!-- <li><a class="dropdownStyle" onclick="writeMarkerData()">Save <b>points</b></a></li> -->
+                            <li><a class="dropdownStyle" data-target="#saveOnlineModalMarker" data-toggle="modal" id="navbarStyle">Save drawn <b>Markers</b></a></li>
+                            <li class="divider"></li>
+                            <li><a class="dropdownStyle" data-target="#saveOnlineModalLine" data-toggle="modal">Save drawn <b>lines</b></a></li>
+                        </ul>
+                        <!-- Hidden modal -->
+                        <div class="modal fade" id="saveOnlineModalMarker">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Save online attributes</h4>
+                                    </div>
+                                    <div class="modal-body" id="modalbody">
+                                        <div class="form-group">
+                                            <label class="control-label" for="focusedInput">Layer Name</label>
+                                            <input class="form-control" id="nameInputM" type="text" value="Map Layer">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="focusedInput">Description</label>
+                                            <input class="form-control" id="descriptionInputM" type="text" value="A description">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="focusedInput">Extra information</label>
+                                            <input class="form-control" id="extraInputM" type="text" value="*Optional*">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        <a type="button" class="btn btn-success" data-dismiss="modal" onclick="writeMarkerData()">Save</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Hidden modal -->
+                        <div class="modal fade" id="saveImportModalMarker">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Save online attributes</h4>
+                                    </div>
+                                    <div class="modal-body" id="modalbody">
+                                        <div class="form-group">
+                                            <label class="control-label" for="focusedInput">Description</label>
+                                            <input class="form-control" id="descriptionInputGeoM" type="text" value="A description">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="focusedInput">Extra information</label>
+                                            <input class="form-control" id="extraInputGeoM" type="text" value="*Optional*">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        <a type="button" class="btn btn-success" data-dismiss="modal" onclick="saveImportMarkerData()">Save</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Hidden modal -->
+                        <div class="modal fade" id="saveOnlineModalLine">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Save online attributes</h4>
+                                    </div>
+                                    <div class="modal-body" id="modalbody">
+                                        <div class="form-group">
+                                            <label class="control-label" for="focusedInput">Layer Name</label>
+                                            <input class="form-control" id="nameInputL" type="text" value="Map Layer">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="focusedInput">Description</label>
+                                            <input class="form-control" id="descriptionInputL" type="text" value="A description">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="focusedInput">Extra information</label>
+                                            <input class="form-control" id="extraInputL" type="text" value="*Optional*">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        <a type="button" class="btn btn-success" data-dismiss="modal" onclick="writeLineData()">Save</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Hidden modal -->
+                        <div class="modal fade" id="saveImportModalLine">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Save online attributes</h4>
+                                    </div>
+                                    <div class="modal-body" id="modalbody">
+                                        <div class="form-group">
+                                            <label class="control-label" for="focusedInput">Description</label>
+                                            <input class="form-control" id="descriptionInputGeoL" type="text" value="A description">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="focusedInput">Extra information</label>
+                                            <input class="form-control" id="extraInputGeoL" type="text" value="*Optional*">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        <a type="button" class="btn btn-success" data-dismiss="modal" onclick="saveImportLineData()">Save</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!--Retrieve from firebase -->
+                    <li class="navbarStyle"><a class="btn btn-info" data-target="#retrieveModal" data-toggle="modal" id="navbarStyle">Load Online Layers</a></li>
+                    <!-- Hidden Modal -->
+                    <div class="modal fade" id="retrieveModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">Retrieve from online database?</h4>
+                                </div>
+                                <div class="modal-body" id="modalbody">
+                                    <h5>It will take a few minutes to import all layers from <b><%= user.username %></b> online account </h5>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="retrieveUserData()">Retrieve</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                      <label class="control-label" for="focusedInput">Extra information</label>
-                      <input class="form-control" id="extraInputGeoM" type="text" value="*Optional*">
+                    <!-- Delete from firebase -->
+                    <li class="navbarStyle"><a class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" id="navbarStyle" onclick="populateDeleteSelect()">Delete Online Layers</a></li>
+                    <!-- Hidden Modal -->
+                    <div class="modal fade" id="deleteModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">Delete which layer?</h4>
+                                </div>
+                                <div class="modal-body" id="modalbody">
+                                    <div class="form-group">
+                                        <label for="select" class="col-lg-2 control-label">Markers</label>
+                                        <select class="form-control" id="selectMarker">
+                                        </select>
+                                        <br>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="select" class="col-lg-2 control-label">Lines</label>
+                                        <select class="form-control" id="selectLine">
+                                        </select>
+                                        <br>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="deleteLayerOnline()">Delete</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="saveImportMarkerData()">Save</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Hidden modal -->
-            <div class="modal fade" id="saveOnlineModalLine">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Save online attributes</h4>
-                  </div>
-                  <div class="modal-body" id="modalbody">
-                    <div class="form-group">
-                      <label class="control-label" for="focusedInput">Layer Name</label>
-                      <input class="form-control" id="nameInputL" type="text" value="Map Layer">
-                    </div>
-                    <div class="form-group">
-                      <label class="control-label" for="focusedInput">Description</label>
-                      <input class="form-control" id="descriptionInputL" type="text" value="A description">
-                    </div>
-                    <div class="form-group">
-                      <label class="control-label" for="focusedInput">Extra information</label>
-                      <input class="form-control" id="extraInputL" type="text" value="*Optional*">
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="writeLineData()">Save</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Hidden modal -->
-            <div class="modal fade" id="saveImportModalLine">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Save online attributes</h4>
-                  </div>
-                  <div class="modal-body" id="modalbody">
-                    <div class="form-group">
-                      <label class="control-label" for="focusedInput">Description</label>
-                      <input class="form-control" id="descriptionInputGeoL" type="text" value="A description">
-                    </div>
-                    <div class="form-group">
-                      <label class="control-label" for="focusedInput">Extra information</label>
-                      <input class="form-control" id="extraInputGeoL" type="text" value="*Optional*">
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="saveImportLineData()">Save</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <!--Retrieve from firebase -->
-          <li class="navbarStyle"><a class="btn btn-info" data-target="#retrieveModal" data-toggle="modal" id="navbarStyle">Load Online Layers</a></li>
-          <!-- Hidden Modal -->
-          <div class="modal fade" id="retrieveModal">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Retrieve from online database?</h4>
-                </div>
-                <div class="modal-body" id="modalbody">
-                  <h5>It will take a few minutes to import all layers from <b><%= user.username %></b> online account </h5>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <a type="button" class="btn btn-success" data-dismiss="modal" onclick="retrieveUserData()">Retrieve</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Delete from firebase -->
-          <li class="navbarStyle"><a class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" id="navbarStyle" onclick="populateDeleteSelect()">Delete Online Layers</a></li>
-          <!-- Hidden Modal -->
-          <div class="modal fade" id="deleteModal">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Delete which layer?</h4>
-                </div>
-                <div class="modal-body" id="modalbody">
-                  <div class="form-group">
-                    <label for="select" class="col-lg-2 control-label">Markers</label>
-                    <select class="form-control" id="selectMarker">
-                      </select>
-                    <br>
-                  </div>
-                  <div class="form-group">
-                    <label for="select" class="col-lg-2 control-label">Lines</label>
-                    <select class="form-control" id="selectLine">
-                      </select>
-                    <br>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <a type="button" class="btn btn-success" data-dismiss="modal" onclick="deleteLayerOnline()">Delete</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--Save to user -->
-          <li class="navbarStyle"><a class="btn btn" data-target="#saveUserModal" data-toggle="modal" id="navbarStyle" onclick="populateSaveUserSelect()" style="background-color: #BA68C8">Assign To User</a></li>
-          <!-- Hidden Modal -->
-          <div class="modal fade" id="saveUserModal">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Modify user data set access</h4>
-                </div>
-                <div class="modal-body" id="modalbody">
-                  <form class="form-horizontal">
-                    <fieldset>
-                      <div class="form-group">
-                        <label for="inputUser" class="col-lg-2 control-label">User(s)</label>
-                        <select id="inputUser" class="selectpicker" data-style="btn-info" data-live-search="true" data-size="5" multiple>
-                          <option value="1">public</option>
-                          <option>a12341</option>
-                          <option>a12342</option>
-                          <option>a12343</option>
-                          <option>a12344</option>
-                          <option value="2">a12345</option>
-                          <option>a12346</option>
-                          <option>a12347</option>
-                          <option>a12348</option>
-                          <option>a12349</option>
+                    <!--Save to user -->
+                    <li class="navbarStyle"><a class="btn btn" data-target="#saveUserModal" data-toggle="modal" id="navbarStyle" onclick="populateSaveUserSelect()" style="background-color: #BA68C8">Assign To User</a></li>
+                    <!-- Hidden Modal -->
+                    <div class="modal fade" id="saveUserModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">Modify user data set access</h4>
+                                </div>
+                                <div class="modal-body" id="modalbody">
+                                    <form class="form-horizontal">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label for="inputUser" class="col-lg-2 control-label">User(s)</label>
+                                                <select id="inputUser" class="selectpicker" data-style="btn-info" data-live-search="true" data-size="5" multiple>
+                                                <option value="1">public</option>
+                                                <option>a12341</option>
+                                                <option>a12342</option>
+                                                <option>a12343</option>
+                                                <option>a12344</option>
+                                                <option value="2">a12345</option>
+                                                <option>a12346</option>
+                                                <option>a12347</option>
+                                                <option>a12348</option>
+                                                <option>a12349</option>
+                                              </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputMarker" class="col-lg-2 control-label">Marker(s)</label>
+                                                <select id="inputMarker" class="selectpicker" data-live-search="true" data-size="5" multiple>
                         </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="inputMarker" class="col-lg-2 control-label">Marker(s)</label>
-                        <select id="inputMarker" class="selectpicker" data-live-search="true" data-size="5" multiple>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputLine" class="col-lg-2 control-label">Line(s)</label>
+                                                <select id="inputLine" class="selectpicker" data-live-search="true" data-size="5" multiple>
                         </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="inputLine" class="col-lg-2 control-label">Line(s)</label>
-                        <select id="inputLine" class="selectpicker" data-live-search="true" data-size="5" multiple>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <a type="button" id="editButton" class="btn btn" data-dismiss="modal" onclick="assignToUser()" style="background-color: #BA68C8; color: white">Assign</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Change JSON in firebase -->
+                    <li class="navbarStyle"><a class="btn btn" data-target="#editJSONModal" data-toggle="modal" id="navbarStyle" onclick="populateJSONData()" style="background-color: #BA68C8">Edit Firebase JSON (Advanced)</a></li>
+                    <!-- Hidden Modal -->
+                    <div class="modal fade" id="editJSONModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">Change firebase JSON data</h4>
+                                </div>
+                                <div class="modal-body" id="modalbody">
+                                    <div class="form-group">
+                                        <label for="editJSONselectM" class="col-lg-2 control-label">Markers</label>
+                                        <select id="editJSONselectM" class="selectpicker" data-divider="true" data-live-search="true" data-size="5">
                         </select>
-                      </div>
-                    </fieldset>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <a type="button" id="editButton" class="btn btn" data-dismiss="modal" onclick="assignToUser()" style="background-color: #BA68C8; color: white">Assign</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ul>
-        <!-- align right buttons -->
-        <ul class="nav navbar-nav navbar-right" id="logout">
-          <li><a class="btn btn-default" id="navbarStyle">Welcome back, <b><%= user.username %></b></a></li>
-          <!-- Logout button, modal trigger -->
-          <li><a class="btn btn-danger" data-target="#logoutModal" data-toggle="modal" id="navbarStyle"><i class="material-icons">power_settings_new</i></a></li>
-          <!-- Hidden modal -->
-          <div class="modal fade" id="logoutModal">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Logout?</h4>
-                </div>
-                <div class="modal-body" id="modalbody">
-                  <h5>You are about to <b>logout</b>, are you sure?</h5>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <a type="button" class="btn btn-danger" href="/logout">Logout</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ul>
-      </div>
-    </div>
-  </nav>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editJSONselectL" class="col-lg-2 control-label">Lines</label>
+                                        <select id="editJSONselectL" class="selectpicker" data-divider="true" data-live-search="true" data-size="5">
+                        </select>
+                                    </div>
+                                    <a onclick="onSelectJSONSelect()">TEst button thingy</a>
+                                    <div id="jsoneditor" style="width: 400px; height: 400px; background-color: white;"></div>
+                                    <script>
+                                        // create the editor
+                                        var container = document.getElementById("jsoneditor");
+                                        var options = {};
+                                        var editor = new JSONEditor(container, options);
 
-  <!-- map div -->
-  <div id='map'></div>
+                                        // set json
+                                        editor.set("SELECT A LAYER");
 
-  <!-- Init map JS last after "map" div -->
-  <script src="/javascripts/adminmap.js"></script>
+                                        // get json
+                                        var json = editor.get();
+                                    </script>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="editJSONNew()">Create new layer</a>
+                                    <a type="button" class="btn btn-danger" data-dismiss="modal" onclick="editJSONOverride()">Save to current layer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+                <!-- align right buttons -->
+                <ul class="nav navbar-nav navbar-right" id="logout">
+                    <li><a class="btn btn-default" id="navbarStyle"><b><%= user.username %></b></a></li>
+                    <!-- Logout button, modal trigger -->
+                    <li><a class="btn btn-danger" data-target="#logoutModal" data-toggle="modal" id="navbarStyle"><i class="material-icons">power_settings_new</i></a></li>
+                    <!-- Hidden modal -->
+                    <div class="modal fade" id="logoutModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">Logout?</h4>
+                                </div>
+                                <div class="modal-body" id="modalbody">
+                                    <h5>You are about to <b>logout</b>, are you sure?</h5>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <a type="button" class="btn btn-danger" href="/logout">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- map div -->
+    <div id='map'></div>
+
+    <!-- Init map JS last after "map" div -->
+    <script src="/javascripts/adminmap.js"></script>
 </body>
 <script>
+    /////////////////////////////////////////////////////////////
+    // INIT BASE MAP
+    /////////////////////////////////////////////////////////////
+    var current = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
+        detectRetina: true,
+        attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+        maxZoom: 18,
+        minZoom: 11
+    });
 
-  /////////////////////////////////////////////////////////////
-  // INIT BASE MAP
-  /////////////////////////////////////////////////////////////
-  var current = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
-            detectRetina: true,
-						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
-						maxZoom: 18,
-            minZoom: 11
-	});
+    var night = L.tileLayer('https://maps-{s}.onemap.sg/v3/Night/{z}/{x}/{y}.png', {
+        detectRetina: true,
+        attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+        maxZoom: 18,
+        minZoom: 11
+    });
 
-  var night = L.tileLayer('https://maps-{s}.onemap.sg/v3/Night/{z}/{x}/{y}.png', {
-            detectRetina: true,
-						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
-						maxZoom: 18,
-            minZoom: 11
-	});
+    var grey = L.tileLayer('https://maps-{s}.onemap.sg/v3/Grey/{z}/{x}/{y}.png', {
+        detectRetina: true,
+        attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+        maxZoom: 18,
+        minZoom: 11
+    });
 
-  var grey = L.tileLayer('https://maps-{s}.onemap.sg/v3/Grey/{z}/{x}/{y}.png', {
-            detectRetina: true,
-						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
-						maxZoom: 18,
-            minZoom: 11
-	});
+    var original = L.tileLayer('https://maps-{s}.onemap.sg/v3/Original/{z}/{x}/{y}.png', {
+        detectRetina: true,
+        attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+        maxZoom: 18,
+        minZoom: 11
+    });
 
-  var original = L.tileLayer('https://maps-{s}.onemap.sg/v3/Original/{z}/{x}/{y}.png', {
-            detectRetina: true,
-						attribution: 'Map data © contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
-						maxZoom: 18,
-            minZoom: 11
-	});
+    map.remove();
 
-  map.remove();
+    var map = L.map('map', {
+        center: [1.32073, 103.910827],
+        zoom: 12,
+        layers: [current]
+    });
 
-  var map = L.map('map', {
-    center: [1.32073, 103.910827],
-    zoom: 12,
-    layers: [current]
-  });
+    var geocodeIcon = L.icon({
+        iconUrl: 'images/123.png',
+        iconSize: [50, 50],
+        popupAnchor: [-6, -21]
+    });
 
-  var geocodeIcon = L.icon({
-    iconUrl: 'images/123.png',
-    iconSize: [50, 50],
-    popupAnchor: [-6, -21]
-  });
-
-  // Geocoder(AKA search)
-  L.control.geocoder('mapzen-t21iVV1', {
-    panToPoint: true,
-    params: {
-      'boundary.country': 'SG'
-    },
-    markers: {
-        icon: geocodeIcon
-    }
-  }).addTo(map);
-
-  //Drawn items layer init
-  var drawnItems = new L.FeatureGroup();
-  map.addLayer(drawnItems);
-
-  var drawnLines = new L.FeatureGroup();
-  map.addLayer(drawnLines);
-
-  var myIcon = L.icon({
-    iconUrl: 'images/marker-icon-old.png',
-    shadowUrl: 'images/marker-shadow.png'
-  });
-
-  var drawControl = new L.Control.Draw({
-    position: 'topright',
-    draw: {
-        polyline: false,
-        polygon: false,
-        rectangle: false,
-        circle: false,
-        marker: {
-              icon: myIcon
+    // Geocoder(AKA search)
+    L.control.geocoder('mapzen-t21iVV1', {
+        panToPoint: true,
+        params: {
+            'boundary.country': 'SG'
+        },
+        markers: {
+            icon: geocodeIcon
         }
-    },
-    edit: {
-        featureGroup: drawnItems,
-        remove: false
-    }
-  });
-  map.addControl(drawControl);
+    }).addTo(map);
 
-  var drawControl2 = new L.Control.Draw({
-      position: 'topright',
-      draw: {
-          polyline: {
-              metric: true,
-              shapeOptions: {
-                color: '#FF0000',
-                opacity: 1,
-                weight: 3
+    //Drawn items layer init
+    var drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+    var drawnLines = new L.FeatureGroup();
+    map.addLayer(drawnLines);
+
+    var myIcon = L.icon({
+        iconUrl: 'images/marker-icon-old.png',
+        shadowUrl: 'images/marker-shadow.png'
+    });
+
+    var drawControl = new L.Control.Draw({
+        position: 'topright',
+        draw: {
+            polyline: false,
+            polygon: false,
+            rectangle: false,
+            circle: false,
+            marker: {
+                icon: myIcon
             }
-          },
-          polygon: false,
-          rectangle: false,
-          circle: false,
-          marker: false
-      },
-      edit: {
-          featureGroup: drawnLines,
-          remove: false
-      }
-  });
-  map.addControl(drawControl2);
+        },
+        edit: {
+            featureGroup: drawnItems,
+            remove: false
+        }
+    });
+    map.addControl(drawControl);
 
-  customMarker = L.Marker
+    var drawControl2 = new L.Control.Draw({
+        position: 'topright',
+        draw: {
+            polyline: {
+                metric: true,
+                shapeOptions: {
+                    color: '#FF0000',
+                    opacity: 1,
+                    weight: 3
+                }
+            },
+            polygon: false,
+            rectangle: false,
+            circle: false,
+            marker: false
+        },
+        edit: {
+            featureGroup: drawnLines,
+            remove: false
+        }
+    });
+    map.addControl(drawControl2);
 
-  //What happens when custom point created
-  map.on('draw:created', function (e) {
-      var type = e.layerType,
-      layer = e.layer;
+    customMarker = L.Marker
 
-      if (type === 'marker') {
-  	    layer.addTo(drawnItems)
-        var test = prompt('Enter extra info of point', 'WIP Please Cancel')
-          // Do marker specific actions
-      }
-      if (type === 'polyline'){
-        layer.addTo(drawnLines)
-      }
+    //What happens when custom point created
+    map.on('draw:created', function(e) {
+        var type = e.layerType,
+            layer = e.layer;
 
-      // Do whatever else you need to. (save to db, add to map etc)
-      map.addLayer(layer);
-  });
+        if (type === 'marker') {
+            layer.addTo(drawnItems)
+            var test = prompt('Enter extra info of point', 'WIP Please Cancel')
+                // Do marker specific actions
+        }
+        if (type === 'polyline') {
+            layer.addTo(drawnLines)
+        }
 
-  //What happens when custom point edited
-  map.on('draw:edited', function (e) {
-      var layers = e.layers;
-      layers.eachLayer(function (layer) {
-          //do whatever you want, most likely save back to db
-      });
-  });
+        // Do whatever else you need to. (save to db, add to map etc)
+        map.addLayer(layer);
+    });
 
-  //Basemap configs
-  var baseMaps = {
-    "Default": current,
-    "Night": night,
-    "Grey": grey,
-    "Original": original
-  };
-
-  //Overlay map configs
-  var overlayMaps = {
-  	"Drawn Markers": drawnItems,
-    "Drawn Lines": drawnLines
-  };
-
-  //First load of layer control
-  lcontrol = L.control.layers(baseMaps, overlayMaps).addTo(map);
-
-  /////////////////////////////////////////////////////////////
-  //FUNCTIONS BELOW ONLY
-  /////////////////////////////////////////////////////////////
-
-  //Toastr Config
-  //
-  toastr.options = {
-    "closeButton": true,
-    "debug": false,
-    "newestOnTop": true,
-    "progressBar": true,
-    "positionClass": "toast-top-right",
-    "preventDuplicates": false,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
-  }
-
-  //Upload JSON
-  //
-  var uploadJSONName;
-  var loadFile = function(event) {
-    uploadJSONName = prompt("JSON Layer name.");
-    if (uploadJSONName != null) {
-      var input = event.target;
-      var reader = new FileReader();
-      // Read the file
-      reader.readAsText(input.files[0]);
-      // Invoked when file is loading.
-      reader.onload = function(){
-        // parse file to JSON object
-        var jsonObject = reader.result;
-        var json = JSON.parse(jsonObject);
-        var type;
-        jsonlayer = L.geoJson(json, {
-          onEachFeature: function (feature, layer) {
-            layer.bindPopup(feature.properties.name);
-            type = feature.geometry.type;
-          }
+    //What happens when custom point edited
+    map.on('draw:edited', function(e) {
+        var layers = e.layers;
+        layers.eachLayer(function(layer) {
+            //do whatever you want, most likely save back to db
         });
+    });
 
-        //save points as clusters to reduce lag
-        var markersJSON = L.markerClusterGroup();
-        markersJSON.addLayer(jsonlayer);
-        map.addLayer(markersJSON);
+    //Basemap configs
+    var baseMaps = {
+        "Default": current,
+        "Night": night,
+        "Grey": grey,
+        "Original": original
+    };
 
-        lcontrol.addOverlay(markersJSON, uploadJSONName);
+    //Overlay map configs
+    var overlayMaps = {
+        "Drawn Markers": drawnItems,
+        "Drawn Lines": drawnLines
+    };
 
-        //save to firebase
-        if (confirm("Save to firebase?") == true) {
-          if (type == "Point"){
-            $('#saveImportModalMarker').modal('show')
-          }
-          if (type == "LineString"){
-            $('#saveImportModalLine').modal('show')
-          }
+    //First load of layer control
+    lcontrol = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+    /////////////////////////////////////////////////////////////
+    //FUNCTIONS BELOW ONLY
+    /////////////////////////////////////////////////////////////
+
+    //Toastr Config
+    //
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    //Upload JSON
+    //
+    var uploadJSONName;
+    var loadFile = function(event) {
+        uploadJSONName = prompt("JSON Layer name.");
+        if (uploadJSONName != null) {
+            var input = event.target;
+            var reader = new FileReader();
+            // Read the file
+            reader.readAsText(input.files[0]);
+            // Invoked when file is loading.
+            reader.onload = function() {
+                // parse file to JSON object
+                var jsonObject = reader.result;
+                var json = JSON.parse(jsonObject);
+                var type;
+                jsonlayer = L.geoJson(json, {
+                    onEachFeature: function(feature, layer) {
+                        layer.bindPopup(feature.properties.name);
+                        type = feature.geometry.type;
+                    }
+                });
+
+                //save points as clusters to reduce lag
+                var markersJSON = L.markerClusterGroup();
+                markersJSON.addLayer(jsonlayer);
+                map.addLayer(markersJSON);
+
+                lcontrol.addOverlay(markersJSON, uploadJSONName);
+
+                //save to firebase
+                if (confirm("Save to firebase?") == true) {
+                    if (type == "Point") {
+                        $('#saveImportModalMarker').modal('show')
+                    }
+                    if (type == "LineString") {
+                        $('#saveImportModalLine').modal('show')
+                    }
+                } else {
+                    toastr.success('Successfully imported JSON/GeoJSON file!', 'Success!', {
+                        timeOut: 3000
+                    });
+                }
+            };
+        } else {
+            if (uploadJSONName == "" || uploadJSONName == null) {
+                toastr.error('Operation cancelled by system.', 'Layer name not given', {
+                    timeOut: 4000
+                });
+            } else {
+                toastr.error('Operation cancelled by user.', 'Layer upload cancelled', {
+                    timeOut: 4000
+                });
+            }
         }
-        else {
-          toastr.success('Successfully imported JSON/GeoJSON file!', 'Success!', {timeOut: 3000});
+    };
+
+    //Upload SHP
+    //
+    function uploadSHP() {
+        var uploadSHPName = prompt("SHP Layer name.");
+        var x = document.getElementById("uploadSHP");
+        var file = x.files[0];
+        var markersSHP = L.markerClusterGroup();
+        if (uploadSHPName != null) {
+            loadshp({
+                url: file,
+                encoding: 'big5',
+                EPSG: 3826
+            }, function(data) {
+                vector = L.geoJson(data);
+                markersSHP.addLayer(vector);
+                map.addLayer(markersSHP);
+                lcontrol.addOverlay(markersSHP, uploadSHPName);
+                toastr.success('Successfully imported SHP file!', 'Success!', {
+                    timeOut: 2000
+                });
+            });
+        } else {
+            if (uploadSHPName == "" || uploadSHPName == null) {
+                toastr.error('Operation cancelled by system.', 'Layer name not given', {
+                    timeOut: 4000
+                });
+            } else {
+                toastr.error('Operation cancelled by user.', 'Layer upload cancelled', {
+                    timeOut: 4000
+                });
+            }
         }
-      };
-    } else {
-      if (uploadJSONName == "" || uploadJSONName == null) {
-        toastr.error('Operation cancelled by system.', 'Layer name not given', {timeOut: 4000});
-      } else {
-        toastr.error('Operation cancelled by user.', 'Layer upload cancelled', {timeOut: 4000});
-      }
     }
-  };
 
-  //Upload SHP
-  //
-  function uploadSHP() {
-    var uploadSHPName = prompt("SHP Layer name.");
-    var x = document.getElementById("uploadSHP");
-    var file = x.files[0];
-    var markersSHP = L.markerClusterGroup();
-    if (uploadSHPName != null) {
-      loadshp({
-          url: file,
-          encoding: 'big5',
-          EPSG: 3826
-      }, function(data) {
-          vector = L.geoJson(data);
-          markersSHP.addLayer(vector);
-          map.addLayer(markersSHP);
-          lcontrol.addOverlay(markersSHP, uploadSHPName);
-          toastr.success('Successfully imported SHP file!', 'Success!', {timeOut: 2000});
-      });
-    } else {
-      if (uploadSHPName == "" || uploadSHPName == null) {
-        toastr.error('Operation cancelled by system.', 'Layer name not given', {timeOut: 4000});
-      } else {
-        toastr.error('Operation cancelled by user.', 'Layer upload cancelled', {timeOut: 4000});
-      }
+    //Download Markers layer into JSON file
+    //
+    function downloadPointsJSON() {
+        var pointsFileName = prompt("File name for Points JSON file.");
+        if (pointsFileName != null) {
+            var drawnItemsJson = drawnItems.toGeoJSON();
+            console.log(drawnItemsJson);
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnItemsJson));
+            var dlAnchorElem = document.getElementById('downloadPoints');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", pointsFileName + ".json");
+        } else {
+            toastr.error('Operation cancelled by user.', 'File download cancelled', {
+                timeOut: 4000
+            });
+        }
     }
-  }
 
-  //Download Markers layer into JSON file
-  //
-  function downloadPointsJSON(){
-    var pointsFileName = prompt("File name for Points JSON file.");
-    if (pointsFileName != null) {
-      var drawnItemsJson = drawnItems.toGeoJSON();
-      console.log(drawnItemsJson);
-      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnItemsJson));
-      var dlAnchorElem = document.getElementById('downloadPoints');
-      dlAnchorElem.setAttribute("href",     dataStr     );
-      dlAnchorElem.setAttribute("download", pointsFileName + ".json");
-    } else {
-      toastr.error('Operation cancelled by user.', 'File download cancelled', {timeOut: 4000});
+    //Download Lines layer into JSON file
+    //
+    function downloadLinesJSON() {
+        var linesFileName = prompt("File name for Lines JSON file.");
+        if (linesFileName != null) {
+            var drawnLinesJson = drawnLines.toGeoJSON();
+            console.log(drawnLinesJson);
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnLinesJson));
+            var dlAnchorElem = document.getElementById('downloadLines');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", linesFileName + ".json");
+        } else {
+            toastr.error('Operation cancelled by user.', 'File download cancelled', {
+                timeOut: 4000
+            });
+        }
     }
-  }
 
-  //Download Lines layer into JSON file
-  //
-  function downloadLinesJSON(){
-    var linesFileName = prompt("File name for Lines JSON file.");
-    if (linesFileName != null) {
-      var drawnLinesJson = drawnLines.toGeoJSON();
-      console.log(drawnLinesJson);
-      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnLinesJson));
-      var dlAnchorElem = document.getElementById('downloadLines');
-      dlAnchorElem.setAttribute("href",     dataStr     );
-      dlAnchorElem.setAttribute("download", linesFileName + ".json");
-    } else {
-      toastr.error('Operation cancelled by user.', 'File download cancelled', {timeOut: 4000});
-    }
-  }
-
-  //Write imported markers to database
-  //
-  function saveImportMarkerData(){
-    var datatype = 'Markers';
-        var now = new Date();
-        var jsonlayerNew = jsonlayer.toGeoJSON();
-        firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + uploadJSONName).set({
-          mapLayer: jsonlayerNew,
-          timeEdited: now.toString(),
-          name: uploadJSONName,
-          description: document.getElementById('descriptionInputGeoM').value,
-          extraInfo: document.getElementById('extraInputGeoM').value
-          });
-        toastr.success('Successfully saved to database!', 'Success!', {timeOut: 2000});
-  }
-
-  //Write custom markers to database
-  //
-  function writeMarkerData() {
-    console.log(document.getElementById('nameInputM').value)
-      if (checkforDuplicates(document.getElementById('nameInputM').value)){
-        // alert("Firebase already has map layer of that name. Input another name instead")
-        toastr.error('Invalid name.', 'Storage into data base cancelled', {timeOut: 4000});
-      }
-      else {
+    //Write imported markers to database
+    //
+    function saveImportMarkerData() {
         var datatype = 'Markers';
         var now = new Date();
-        var drawnItemsJson = drawnItems.toGeoJSON();
-        firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + document.getElementById('nameInputM').value).set({
-          mapLayer: drawnItemsJson,
-          timeEdited: now.toString(),
-          name: document.getElementById('nameInputM').value,
-          description: document.getElementById('descriptionInputM').value,
-          extraInfo: document.getElementById('extraInputM').value
+        var jsonlayerNew = jsonlayer.toGeoJSON();
+        firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + uploadJSONName).set({
+            mapLayer: jsonlayerNew,
+            timeEdited: now.toString(),
+            name: uploadJSONName,
+            description: document.getElementById('descriptionInputGeoM').value,
+            extraInfo: document.getElementById('extraInputGeoM').value
         });
-        toastr.success('Successfully saved to database!', 'Success!', {timeOut: 2000});
-      }
-  }
+        toastr.success('Successfully saved to database!', 'Success!', {
+            timeOut: 2000
+        });
+    }
 
-  //Write imported lines to database
-  //
-  function saveImportLineData(){
-    var datatype = 'Lines';
+    //Write custom markers to database
+    //
+    function writeMarkerData() {
+        console.log(document.getElementById('nameInputM').value)
+        if (checkforDuplicates(document.getElementById('nameInputM').value)) {
+            // alert("Firebase already has map layer of that name. Input another name instead")
+            toastr.error('Invalid name.', 'Storage into data base cancelled', {
+                timeOut: 4000
+            });
+        } else {
+            var datatype = 'Markers';
+            var now = new Date();
+            var drawnItemsJson = drawnItems.toGeoJSON();
+            firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + document.getElementById('nameInputM').value).set({
+                mapLayer: drawnItemsJson,
+                timeEdited: now.toString(),
+                name: document.getElementById('nameInputM').value,
+                description: document.getElementById('descriptionInputM').value,
+                extraInfo: document.getElementById('extraInputM').value
+            });
+            toastr.success('Successfully saved to database!', 'Success!', {
+                timeOut: 2000
+            });
+        }
+    }
+
+    //Write imported lines to database
+    //
+    function saveImportLineData() {
+        var datatype = 'Lines';
         var now = new Date();
         var jsonlayerNew = jsonlayer.toGeoJSON();
         firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + uploadJSONName).set({
-          mapLayer: jsonlayerNew,
-          timeEdited: now.toString(),
-          name: uploadJSONName,
-          description: document.getElementById('descriptionInputGeoL').value,
-          extraInfo: document.getElementById('extraInputGeoL').value
-          });
-        toastr.success('Successfully saved to database!', 'Success!', {timeOut: 2000});
-  }
-
-  //Write custom lines to database
-  //
-  function writeLineData() {
-    var datatype = 'Lines';
-    var now = new Date();
-    var drawnLinesJson = drawnLines.toGeoJSON();
-
-    firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/"+ document.getElementById('nameInputL').value).set({
-      mapLayer : drawnLinesJson,
-      timeEdited: now.toString(),
-      name: document.getElementById('nameInputL').value,
-      description: document.getElementById('descriptionInputL').value,
-      extraInfo: document.getElementById('extraInputL').value
-    });
-    toastr.success('Successfully saved to database!', 'Success!', {timeOut: 2000});
-  }
-
-  //Check database for similar lines
-  // (WIP)
-  function checkforDuplicates(layername){
-    firebase.database().ref('Users/' + <%= user.id %> + '/Markers/').once('value').then(function(snapshot) {
-    return snapshot.child(layername).exists();
-    });
-  }
-
-  //Retrieve markers from database
-  //
-  function retrieveUserData() {
-    var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Markers/");
-    query.once("value")
-      .then(function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-        // key will be "ada" the first time and "alan" the second time
-        var key = childSnapshot.key;
-        console.log(key)
-        // childData will be the actual contents of the child
-        var childData = childSnapshot.val();
-        console.log(childData.mapLayer)
-        jsonlayer = L.geoJson(childData.mapLayer, {
-          onEachFeature: function (feature, layer) {
-            layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
-            //
-          }
+            mapLayer: jsonlayerNew,
+            timeEdited: now.toString(),
+            name: uploadJSONName,
+            description: document.getElementById('descriptionInputGeoL').value,
+            extraInfo: document.getElementById('extraInputGeoL').value
         });
-        //save points as clusters to reduce lag
-        var markersJSON = L.markerClusterGroup();
-        markersJSON.addLayer(jsonlayer);
-        map.addLayer(markersJSON);
-
-        lcontrol.addOverlay(markersJSON, key);
-      });
-    });
-    var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Lines/");
-    query.once("value")
-      .then(function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-        // key will be layer name
-        var key = childSnapshot.key;
-        console.log(key)
-        // childData will be the actual contents of the child (GeoJSON)
-        var childData = childSnapshot.val();
-        console.log(childData.mapLayer)
-        jsonlayer = L.geoJson(childData.mapLayer, {
-          onEachFeature: function (feature, layer) {
-            layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
-          }
+        toastr.success('Successfully saved to database!', 'Success!', {
+            timeOut: 2000
         });
-        lcontrol.addOverlay(jsonlayer, key);
-      });
-    });
-    toastr.success('Successfully retrieved all data layers linked with account <%= user.username %>', 'Success!', {timeOut: 2000});
-  }
+    }
 
-    function removeOptions(selectbox)
-    {
-     var i;
-        for(i = selectbox.options.length - 1 ; i >= 0 ; i--)
-        {
+    //Write custom lines to database
+    //
+    function writeLineData() {
+        var datatype = 'Lines';
+        var now = new Date();
+        var drawnLinesJson = drawnLines.toGeoJSON();
+
+        firebase.database().ref('Users/' + <%= user.id %> + '/' + datatype + "/" + document.getElementById('nameInputL').value).set({
+            mapLayer: drawnLinesJson,
+            timeEdited: now.toString(),
+            name: document.getElementById('nameInputL').value,
+            description: document.getElementById('descriptionInputL').value,
+            extraInfo: document.getElementById('extraInputL').value
+        });
+        toastr.success('Successfully saved to database!', 'Success!', {
+            timeOut: 2000
+        });
+    }
+
+    //Check database for similar lines
+    // (WIP)
+    function checkforDuplicates(layername) {
+        firebase.database().ref('Users/' + <%= user.id %> + '/Markers/').once('value').then(function(snapshot) {
+            return snapshot.child(layername).exists();
+        });
+    }
+
+    //Retrieve markers from database
+    //
+    function retrieveUserData() {
+        var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
+        query.once("value")
+            .then(function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    // key will be "ada" the first time and "alan" the second time
+                    var key = childSnapshot.key;
+                    console.log(key)
+                        // childData will be the actual contents of the child
+                    var childData = childSnapshot.val();
+                    console.log(childData.mapLayer)
+                    jsonlayer = L.geoJson(childData.mapLayer, {
+                        onEachFeature: function(feature, layer) {
+                            layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
+                            //
+                        }
+                    });
+                    //save points as clusters to reduce lag
+                    var markersJSON = L.markerClusterGroup();
+                    markersJSON.addLayer(jsonlayer);
+                    map.addLayer(markersJSON);
+
+                    lcontrol.addOverlay(markersJSON, key);
+                });
+            });
+        var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/");
+        query.once("value")
+            .then(function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    // key will be layer name
+                    var key = childSnapshot.key;
+                    console.log(key)
+                        // childData will be the actual contents of the child (GeoJSON)
+                    var childData = childSnapshot.val();
+                    console.log(childData.mapLayer)
+                    jsonlayer = L.geoJson(childData.mapLayer, {
+                        onEachFeature: function(feature, layer) {
+                            layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
+                        }
+                    });
+                    lcontrol.addOverlay(jsonlayer, key);
+                });
+            });
+        toastr.success('Successfully retrieved all data layers linked with account <%= user.username %>', 'Success!', {
+            timeOut: 2000
+        });
+    }
+
+    function removeOptions(selectbox) {
+        var i;
+        for (i = selectbox.options.length - 1; i >= 0; i--) {
             selectbox.remove(i);
         }
     }
 
     //Populate dropdown for layer deletion
     //
-    function populateDeleteSelect(){
-      //Deleting all entries from dropdown
-      removeOptions(document.getElementById("selectMarker"));
-      var select = document.getElementById("selectMarker");
-      select.options[select.options.length] = new Option('NIL', 'NIL');
+    function populateDeleteSelect() {
+        //Deleting all entries from dropdown
+        removeOptions(document.getElementById("selectMarker"));
+        var select = document.getElementById("selectMarker");
+        select.options[select.options.length] = new Option('NIL', 'NIL');
 
-      removeOptions(document.getElementById("selectLine"));
-      var select = document.getElementById("selectLine");
-      select.options[select.options.length] = new Option('NIL', 'NIL');
+        removeOptions(document.getElementById("selectLine"));
+        var select = document.getElementById("selectLine");
+        select.options[select.options.length] = new Option('NIL', 'NIL');
 
-      var sel = document.getElementById('selectMarker');
-      for(var i = 0; i < layerMarker.length; i++) {
-      console.log(layerMarker[i])
-      var opt = document.createElement('option');
-      opt.innerHTML = layerMarker[i];
-      opt.value = layerMarker[i];
-      sel.appendChild(opt);
-      }
-      var sel = document.getElementById('selectLine');
-      for(var i = 0; i < layerLine.length; i++) {
-      console.log(layerLine[i])
-      var opt = document.createElement('option');
-      opt.innerHTML = layerLine[i];
-      opt.value = layerLine[i];
-      sel.appendChild(opt);
-      }
+        var sel = document.getElementById('selectMarker');
+        for (var i = 0; i < layerMarker.length; i++) {
+            console.log(layerMarker[i])
+            var opt = document.createElement('option');
+            opt.innerHTML = layerMarker[i];
+            opt.value = layerMarker[i];
+            sel.appendChild(opt);
+        }
+        var sel = document.getElementById('selectLine');
+        for (var i = 0; i < layerLine.length; i++) {
+            console.log(layerLine[i])
+            var opt = document.createElement('option');
+            opt.innerHTML = layerLine[i];
+            opt.value = layerLine[i];
+            sel.appendChild(opt);
+        }
     }
 
-    function populateSaveUserSelect(){
+    function populateSaveUserSelect() {
 
-      //Deleting all entries from dropdown
-      removeOptions(document.getElementById("inputMarker"));
+        //Deleting all entries from dropdown
+        removeOptions(document.getElementById("inputMarker"));
 
-      removeOptions(document.getElementById("inputLine"));
+        removeOptions(document.getElementById("inputLine"));
 
-      var sel = document.getElementById('inputMarker');
-      for(var i = 0; i < layerMarker.length; i++) {
+        var sel = document.getElementById('inputMarker');
+        for (var i = 0; i < layerMarker.length; i++) {
 
-        var opt = document.createElement('option');
-        opt.innerHTML = layerMarker[i];
-        opt.value = layerMarker[i];
-        sel.appendChild(opt);
-      }
-      var sel1 = document.getElementById('inputLine');
-      for(var i = 0; i < layerLine.length; i++) {
-        var opt = document.createElement('option');
-        opt.innerHTML = layerLine[i];
-        opt.value = layerLine[i];
-        sel1.appendChild(opt);
-      }
-      $('.selectpicker').selectpicker('refresh');
+            var opt = document.createElement('option');
+            opt.innerHTML = layerMarker[i];
+            opt.value = layerMarker[i];
+            sel.appendChild(opt);
+        }
+        var sel1 = document.getElementById('inputLine');
+        for (var i = 0; i < layerLine.length; i++) {
+            var opt = document.createElement('option');
+            opt.innerHTML = layerLine[i];
+            opt.value = layerLine[i];
+            sel1.appendChild(opt);
+        }
+        $('.selectpicker').selectpicker('refresh');
     }
 
-    function deleteLayerOnline(){
-      var layerSelected = document.getElementById("selectMarker");
-      var selectedTextM = layerSelected.options[layerSelected.selectedIndex].text;
-      var layerSelected = document.getElementById("selectLine");
-      var selectedTextL = layerSelected.options[layerSelected.selectedIndex].text;
-      console.log(selectedTextM);
-      console.log(selectedTextL);
-      if (selectedTextM != 'NIL'){
-        var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Markers/" + selectedTextM);
-        query.remove().then(function(){
-          console.log("Remove successful")
-          toastr.success('Successfully removed layer ' + selectedTextM + ' from <%= user.username %>', 'Success!', {timeOut: 4000});
-          window.location.reload();
-        })
-        .catch(function(error){
-          console.log("Remove failed: " + error.message)
-        })
-      }
-      if (selectedTextL != 'NIL'){
-        var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Lines/" + selectedTextL);
-        query.remove().then(function(){
-          console.log("Remove successful")
-          toastr.success('Successfully removed layer ' + selectedTextL + ' from <%= user.username %>', 'Success!', {timeOut: 4000});
-          window.location.reload();
-        })
-        .catch(function(error){
-          console.log("Remove failed: " + error.message)
-        })
-      }
-      }
-      var selected = [];
+    function deleteLayerOnline() {
+        var layerSelected = document.getElementById("selectMarker");
+        var selectedTextM = layerSelected.options[layerSelected.selectedIndex].text;
+        var layerSelected = document.getElementById("selectLine");
+        var selectedTextL = layerSelected.options[layerSelected.selectedIndex].text;
+        console.log(selectedTextM);
+        console.log(selectedTextL);
+        if (selectedTextM != 'NIL') {
+            var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/" + selectedTextM);
+            query.remove().then(function() {
+                    console.log("Remove successful")
+                    toastr.success('Successfully removed layer ' + selectedTextM + ' from <%= user.username %>', 'Success!', {
+                        timeOut: 4000
+                    });
+                    window.location.reload();
+                })
+                .catch(function(error) {
+                    console.log("Remove failed: " + error.message)
+                })
+        }
+        if (selectedTextL != 'NIL') {
+            var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/" + selectedTextL);
+            query.remove().then(function() {
+                    console.log("Remove successful")
+                    toastr.success('Successfully removed layer ' + selectedTextL + ' from <%= user.username %>', 'Success!', {
+                        timeOut: 4000
+                    });
+                    window.location.reload();
+                })
+                .catch(function(error) {
+                    console.log("Remove failed: " + error.message)
+                })
+        }
+    }
+    var selected = [];
 
-      $(document).ready(function() {
-        $("#editButton").click(function(){
-          $.each($("#inputUser option:selected"), function(){            
-              selected.push($(this).val());
-          });
-          });
-      });
+    $(document).ready(function() {
+        $("#editButton").click(function() {
+            $.each($("#inputUser option:selected"), function() {
+                selected.push($(this).val());
+            });
+        });
+    });
 
-      function assignToUser(){
+    function assignToUser() {
         var selectedMarker = document.getElementById('inputMarker')
         var selectedLine = document.getElementById('inputLine')
 
-        if(selectedMarker.value != null){
-        var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Markers/");
-        query.once("value")
-          .then(function(snapshot){
-            var nameM = snapshot.child(selectedMarker.value + "/name").val();
-            console.log(nameM)
-            var descriptionM = snapshot.child(selectedMarker.value + "/description").val();
-            var extraInfoM = snapshot.child(selectedMarker.value + "/extraInfo").val();
-            var timeEditedM = snapshot.child(selectedMarker.value + "/timeEdited").val();
-            var mapLayerM = snapshot.child(selectedMarker.value + "/mapLayer").val();
+        if (selectedMarker.value != null) {
+            var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
+            query.once("value")
+                .then(function(snapshot) {
+                    var nameM = snapshot.child(selectedMarker.value + "/name").val();
+                    console.log(nameM)
+                    var descriptionM = snapshot.child(selectedMarker.value + "/description").val();
+                    var extraInfoM = snapshot.child(selectedMarker.value + "/extraInfo").val();
+                    var timeEditedM = snapshot.child(selectedMarker.value + "/timeEdited").val();
+                    var mapLayerM = snapshot.child(selectedMarker.value + "/mapLayer").val();
 
-            for (i = 0; i < selected.length; i++) { 
-            firebase.database().ref('Users/' + selected[i] + '/Markers/' + nameM).set({
-                mapLayer: mapLayerM,
-                timeEdited: timeEditedM,
-                name: nameM,
-                description: descriptionM,
-                extraInfo: extraInfoM
-              });
-            }
-          })
-          toastr.success('Successfully saved markers to database!', 'Success!', {timeOut: 2000});
+                    for (i = 0; i < selected.length; i++) {
+                        firebase.database().ref('Users/' + selected[i] + '/Markers/' + nameM).set({
+                            mapLayer: mapLayerM,
+                            timeEdited: timeEditedM,
+                            name: nameM,
+                            description: descriptionM,
+                            extraInfo: extraInfoM
+                        });
+                    }
+                })
+            toastr.success('Successfully saved markers to database!', 'Success!', {
+                timeOut: 2000
+            });
         }
 
-        if(selectedLine.value != null){
-        var query = firebase.database().ref("Users/"+ <%= user.id %> + "/Lines/");
-        query.once("value")
-          .then(function(snapshot){      
-            var nameL = snapshot.child(selectedMarker.value + "/name").val();
-            console.log(nameL)
-            var descriptionL = snapshot.child(selectedMarker.value + "/description").val();
-            var extraInfoL = snapshot.child(selectedMarker.value + "/extraInfo").val();
-            var timeEditedL = snapshot.child(selectedMarker.value + "/timeEdited").val();
-            var mapLayerL = snapshot.child(selectedMarker.value + "/mapLayer").val();
+        if (selectedLine.value != null) {
+            var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/");
+            query.once("value")
+                .then(function(snapshot) {
+                    var nameL = snapshot.child(selectedMarker.value + "/name").val();
+                    console.log(nameL)
+                    var descriptionL = snapshot.child(selectedMarker.value + "/description").val();
+                    var extraInfoL = snapshot.child(selectedMarker.value + "/extraInfo").val();
+                    var timeEditedL = snapshot.child(selectedMarker.value + "/timeEdited").val();
+                    var mapLayerL = snapshot.child(selectedMarker.value + "/mapLayer").val();
 
-            for (i = 0; i < selected.length; i++) { 
-              firebase.database().ref('Users/' + selected[i] + '/Lines/' + nameL).set({
-                mapLayer: mapLayerL,
-                timeEdited: timeEditedL,
-                name: nameL,
-                description: descriptionL,
-                extraInfo: extraInfoL
-                });
-            }
-          })
-          toastr.success('Successfully saved Lines to database!', 'Success!', {timeOut: 2000});
+                    for (i = 0; i < selected.length; i++) {
+                        firebase.database().ref('Users/' + selected[i] + '/Lines/' + nameL).set({
+                            mapLayer: mapLayerL,
+                            timeEdited: timeEditedL,
+                            name: nameL,
+                            description: descriptionL,
+                            extraInfo: extraInfoL
+                        });
+                    }
+                })
+            toastr.success('Successfully saved Lines to database!', 'Success!', {
+                timeOut: 2000
+            });
         }
+    }
 
-       
+    function populateJSONData() {
+        //Deleting all entries from dropdown
+        removeOptions(document.getElementById("editJSONselectM"));
+        var select = document.getElementById("editJSONselectM");
+        select.options[select.options.length] = new Option('NIL', 'NIL');
+
+        removeOptions(document.getElementById("editJSONselectL"));
+        var select = document.getElementById("editJSONselectL");
+        select.options[select.options.length] = new Option('NIL', 'NIL');
+
+        var sel = document.getElementById('editJSONselectM');
+        var sel1 = document.getElementById('editJSONselectL');
+
+        for (var i = 0; i < layerMarker.length; i++) {
+            var opt = document.createElement('option');
+            opt.innerHTML = layerMarker[i];
+            opt.value = layerMarker[i];
+            sel.appendChild(opt);
+        }
+        for (var i = 0; i < layerLine.length; i++) {
+            var opt = document.createElement('option');
+            opt.innerHTML = layerLine[i];
+            opt.value = layerLine[i];
+            sel1.appendChild(opt);
+        }
+        $('.selectpicker').selectpicker('refresh');
+    }
+    //JSON Editor
+    //WIP
+    var type
+
+    function onSelectJSONSelect() {
+    var selectedMarker = "";
+    var selectedLine = "";
+    selectedMarker = document.getElementById('editJSONselectM')
+    selectedLine = document.getElementById('editJSONselectL')
+    console.log(selectedMarker.value)
+    console.log(selectedLine.value)
+    if (selectedMarker.value == "NIL" && selectedLine.value == "NIL") {
+        alert("Select either a marker or line layer to edit JSON data")
+    } else {
+        if (selectedMarker.value != "NIL" && selectedLine.value != "NIL") {
+            alert("Select only 1 layer to edit at a time (Marker or Line)")
+        } else {
+            if (selectedMarker.value != "NIL") {
+                var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
+                query.once("value")
+                    .then(function(snapshot) {
+                        var markerJSON = snapshot.child(selectedMarker.value).val();
+                        console.log(markerJSON)
+                        editor.set(markerJSON)
+                        type = "Markers"
+                    })
+            }
+            if (selectedLine.value != "NIL") {
+                var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/");
+                query.once("value")
+                    .then(function(snapshot) {
+                        var LineJSON = snapshot.child(selectedLine.value).val();
+                        console.log(LineJSON)
+                        editor.set(LineJSON)
+                        type = "Lines"
+                    })
+            }
+        }
+    }
+}
+    //Able to update JSON Under new name
+    //
+    function editJSONNew(){
+      var json = editor.get();
+      var inputJSON = JSON.stringify(json, null, 2)
+
+      var layer = prompt("Please enter your new layer name", "Map Layer");
+      console.log(layer)
+      if (layer != null) {
+        var updatedObj = {};
+        updatedObj[layer] = json;
+        firebase.database().ref('Users/' + <%= user.id %> + '/' + type + "/").update(
+               updatedObj
+            );
       }
+      location.reload();
+    }
+    function editJSONOverride(){
+      var json = editor.get();
+      alert(JSON.stringify(json, null, 2));
+    }
 </script>
+
 </html>
