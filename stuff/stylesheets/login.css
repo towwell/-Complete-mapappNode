@@ -1,10 +1,10 @@
 body {
     background: 
     linear-gradient(
-      rgba(0, 0, 0, 0.65), 
-      rgba(0, 0, 0, 0.65)
+      rgba(0, 0, 0, 0.45), 
+      rgba(0, 0, 0, 0.45)
     ),
-    url(http://webeetc.com/images/webeetc.com-bg-4.jpg) no-repeat center center fixed;
+    url(../images/noon.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
