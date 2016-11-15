@@ -72,6 +72,7 @@
     <script src="/javascripts/jsoneditor.min.js"></script>
 
     <script>
+   
     /////////////////////////////////////////////////////////////
     // INIT FIREBASE
     /////////////////////////////////////////////////////////////
@@ -82,6 +83,7 @@
             storageBucket: "awesome-93639.appspot.com",
             messagingSenderId: "900291118172"
         };
+         
         firebase.initializeApp(config);
         var database = firebase.database();
 
@@ -109,7 +111,9 @@
                         layerLine.push(key)
                     })
                 })
+                toastr.info('Initializing map application', 'Loading...', { timeOut: 6000 });       
         }
+
         window.onload = updateDeleteLayer;
     </script>
 
@@ -389,7 +393,6 @@
                                             <select id="editJSONselectL" class="selectpicker" data-divider="true" data-live-search="true" data-size="5">
                                             </select>
                                         </div>
-                                        <a class="btn btn-info" onclick="onSelectJSONSelect()"><i class="material-icons">arrow_forward</i></a>
                                       </fieldset>
                                     </form>
                                     <div id="jsoneditor"></div>
@@ -1087,44 +1090,6 @@
     var type
     var name
 
-    function onSelectJSONSelect() {
-    var selectedMarker = "";
-    var selectedLine = "";
-    selectedMarker = document.getElementById('editJSONselectM')
-    selectedLine = document.getElementById('editJSONselectL')
-    console.log(selectedMarker.value)
-    console.log(selectedLine.value)
-    if (selectedMarker.value == "NIL" && selectedLine.value == "NIL") {
-        alert("Select either a marker or line layer to edit JSON data")
-    } else {
-        if (selectedMarker.value != "NIL" && selectedLine.value != "NIL") {
-            alert("Select only 1 layer to edit at a time (Marker or Line)")
-        } else {
-            if (selectedMarker.value != "NIL") {
-                var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
-                query.once("value")
-                    .then(function(snapshot) {
-                        var markerJSON = snapshot.child(selectedMarker.value).val();
-                        console.log(markerJSON)
-                        editor.set(markerJSON)
-                        type = "Markers"
-                        name = snapshot.child(selectedMarker.value + "/name").val();
-                    })
-            }
-            if (selectedLine.value != "NIL") {
-                var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/");
-                query.once("value")
-                    .then(function(snapshot) {
-                        var LineJSON = snapshot.child(selectedLine.value).val();
-                        console.log(LineJSON)
-                        editor.set(LineJSON)
-                        type = "Lines"
-                        name = snapshot.child(selectedMarker.value + "/name").val();
-                    })
-            }
-        }
-    }
-}
     //Able to update JSON under new name
     //
     function editJSONNew(){
@@ -1153,15 +1118,30 @@
             );
     }
 
+    //JSON Editor updates on selected layer
+    //
     $('#editJSONselectM').on('changed.bs.select', function (e) {
       var layerSelectedM = document.getElementById("editJSONselectM");
       var selectedTextM1 = layerSelectedM.options[layerSelectedM.selectedIndex].text;
 
       console.log(layerSelectedM.value)
+
+      var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
+                query.once("value")
+                    .then(function(snapshot) {
+                        var markerJSON = snapshot.child(layerSelectedM.value).val();
+                        console.log(markerJSON)
+                        editor.set(markerJSON)
+                        type = "Markers"
+                        name = snapshot.child(layerSelectedM.value + "/name").val();
+                    })
+
       if(selectedTextM1 != "Nothing selected") {
         $('#editJSONselectL').prop('disabled', true);
+        $('#editJSONselectL').selectpicker('refresh');
       } else {
         $('#editJSONselectL').prop('disabled', false);
+        $('#editJSONselectL').selectpicker('refresh');
       }
     });
 
@@ -1169,10 +1149,22 @@
       var layerSelectedL = document.getElementById("editJSONselectL");
       var selectedTextL1 = layerSelectedL.options[layerSelectedL.selectedIndex].text;
 
+      var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/");
+                query.once("value")
+                    .then(function(snapshot) {
+                        var LineJSON = snapshot.child(layerSelectedL.value).val();
+                        console.log(LineJSON)
+                        editor.set(LineJSON)
+                        type = "Lines"
+                        name = snapshot.child(layerSelectedL.value + "/name").val();
+                    })
+
       if(selectedTextL1 != "Nothing selected") {
-        $('#editJSONselectM').prop('disabled', true);
+        $('#editJSONselectM').prop('disabled',true);
+        $('#editJSONselectM').selectpicker('refresh');
       } else {
-        $('#editJSONselectM').prop('disabled', false);
+        $('#editJSONselectM').prop('disabled',false);
+        $('#editJSONselectM').selectpicker('refresh');
       }
     });
 </script>
