@@ -1085,6 +1085,7 @@
     //JSON Editor
     //WIP
     var type
+    var name
 
     function onSelectJSONSelect() {
     var selectedMarker = "";
@@ -1107,6 +1108,7 @@
                         console.log(markerJSON)
                         editor.set(markerJSON)
                         type = "Markers"
+                        name = snapshot.child(selectedMarker.value + "/name").val();
                     })
             }
             if (selectedLine.value != "NIL") {
@@ -1117,16 +1119,16 @@
                         console.log(LineJSON)
                         editor.set(LineJSON)
                         type = "Lines"
+                        name = snapshot.child(selectedMarker.value + "/name").val();
                     })
             }
         }
     }
 }
-    //Able to update JSON Under new name
+    //Able to update JSON under new name
     //
     function editJSONNew(){
       var json = editor.get();
-      var inputJSON = JSON.stringify(json, null, 2)
 
       var layer = prompt("Please enter your new layer name", "Map Layer");
       console.log(layer)
@@ -1139,9 +1141,16 @@
       }
       location.reload();
     }
+    //Able to update JSON under same name
+    //
     function editJSONOverride(){
       var json = editor.get();
-      alert(JSON.stringify(json, null, 2));
+
+      var updatedObj = {};
+        updatedObj[name] = json;
+        firebase.database().ref('Users/' + <%= user.id %> + '/' + type + "/").update(
+               updatedObj
+            );
     }
 
     $('#editJSONselectM').on('changed.bs.select', function (e) {
