@@ -64,6 +64,12 @@ span {
   font-size: 14px;
 }
 
+#jsoneditor {
+  width: fill;
+  height: 55vh;
+  background-color: white;
+}
+
 .leaflet-pelias-message {
   color: black !important;
 }

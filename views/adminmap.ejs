@@ -282,7 +282,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="retrieveUserData()">Retrieve</a>
+                                    <a type="button" class="btn btn-info" data-dismiss="modal" onclick="retrieveUserData()">Retrieve</a>
                                 </div>
                             </div>
                         </div>
@@ -313,13 +313,13 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="deleteLayerOnline()">Delete</a>
+                                    <a type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteLayerOnline()">Delete</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!--Save to user -->
-                    <li class="navbarStyle"><a class="btn btn" data-target="#saveUserModal" data-toggle="modal" id="navbarStyle" onclick="populateSaveUserSelect()" style="background-color: #BA68C8">Assign To User</a></li>
+                    <li class="navbarStyle"><a class="btn" data-target="#saveUserModal" data-toggle="modal" id="navbarStyle" onclick="populateSaveUserSelect()" style="background-color: #BA68C8">Assign To User</a></li>
                     <!-- Hidden Modal -->
                     <div class="modal fade" id="saveUserModal">
                         <div class="modal-dialog">
@@ -333,7 +333,7 @@
                                         <fieldset>
                                             <div class="form-group">
                                                 <label for="inputUser" class="col-lg-2 control-label">User(s)</label>
-                                                <select id="inputUser" class="selectpicker" data-style="btn-info" data-live-search="true" data-size="5" multiple>
+                                                <select id="inputUser" class="selectpicker" data-style="btn-info" data-live-search="true" data-size="5" multiple data-actions-box="true">
                                                 <option value="1">public</option>
                                                 <option>a12341</option>
                                                 <option>a12342</option>
@@ -348,13 +348,13 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="inputMarker" class="col-lg-2 control-label">Marker(s)</label>
-                                                <select id="inputMarker" class="selectpicker" data-live-search="true" data-size="5" multiple>
-                        </select>
+                                                <select id="inputMarker" class="selectpicker" data-live-search="true" data-size="5" multiple data-actions-box="true" onchange="toggleSelectM()">
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="inputLine" class="col-lg-2 control-label">Line(s)</label>
-                                                <select id="inputLine" class="selectpicker" data-live-search="true" data-size="5" multiple>
-                        </select>
+                                                <select id="inputLine" class="selectpicker" data-live-search="true" data-size="5" multiple data-actions-box="true" onchange="toggleSelectM()">
+                                                </select>
                                             </div>
                                         </fieldset>
                                     </form>
@@ -366,8 +366,8 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Change JSON in firebase -->
-                    <li class="navbarStyle"><a class="btn btn" data-target="#editJSONModal" data-toggle="modal" id="navbarStyle" onclick="populateJSONData()" style="background-color: #BA68C8">Edit Firebase JSON (Advanced)</a></li>
+                    <!-- Modify JSON in firebase -->
+                    <li class="navbarStyle"><a class="btn btn" data-target="#editJSONModal" data-toggle="modal" id="navbarStyle" onclick="populateJSONData()" style="background-color: #4DB6AC">Edit Firebase JSON (Advanced)</a></li>
                     <!-- Hidden Modal -->
                     <div class="modal fade" id="editJSONModal">
                         <div class="modal-dialog">
@@ -377,22 +377,29 @@
                                     <h4 class="modal-title">Change firebase JSON data</h4>
                                 </div>
                                 <div class="modal-body" id="modalbody">
-                                    <div class="form-group">
-                                        <label for="editJSONselectM" class="col-lg-2 control-label">Markers</label>
-                                        <select id="editJSONselectM" class="selectpicker" data-divider="true" data-live-search="true" data-size="5">
-                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="editJSONselectL" class="col-lg-2 control-label">Lines</label>
-                                        <select id="editJSONselectL" class="selectpicker" data-divider="true" data-live-search="true" data-size="5">
-                        </select>
-                                    </div>
-                                    <a onclick="onSelectJSONSelect()">TEst button thingy</a>
-                                    <div id="jsoneditor" style="width: 400px; height: 400px; background-color: white;"></div>
+                                  <form class="form-horizontal">
+                                      <fieldset>
+                                        <div class="form-group">
+                                            <label for="editJSONselectM" class="col-lg-2 control-label">Markers</label>
+                                            <select id="editJSONselectM" class="selectpicker" data-divider="true" data-live-search="true" data-size="5">
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="editJSONselectL" class="col-lg-2 control-label">Lines</label>
+                                            <select id="editJSONselectL" class="selectpicker" data-divider="true" data-live-search="true" data-size="5">
+                                            </select>
+                                        </div>
+                                        <a class="btn btn-info" onclick="onSelectJSONSelect()"><i class="material-icons">arrow_forward</i></a>
+                                      </fieldset>
+                                    </form>
+                                    <div id="jsoneditor"></div>
                                     <script>
                                         // create the editor
                                         var container = document.getElementById("jsoneditor");
-                                        var options = {};
+                                        var options = {
+                                          mode: 'tree',
+                                          modes: ['code', 'form', 'text', 'tree', 'view']
+                                        };
                                         var editor = new JSONEditor(container, options);
 
                                         // set json
@@ -404,8 +411,8 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                    <a type="button" class="btn btn-success" data-dismiss="modal" onclick="editJSONNew()">Create new layer</a>
-                                    <a type="button" class="btn btn-danger" data-dismiss="modal" onclick="editJSONOverride()">Save to current layer</a>
+                                    <a type="button" class="btn" data-dismiss="modal" onclick="editJSONNew()" style="background-color: #4DB6AC; color: white">Create new layer</a>
+                                    <a type="button" class="btn" data-dismiss="modal" onclick="editJSONOverride()" style="background-color: #009688; color: white">Save to current layer</a>
                                 </div>
                             </div>
                         </div>
@@ -441,9 +448,6 @@
 
     <!-- map div -->
     <div id='map'></div>
-
-    <!-- Init map JS last after "map" div -->
-    <script src="/javascripts/adminmap.js"></script>
 </body>
 <script>
     /////////////////////////////////////////////////////////////
@@ -476,8 +480,6 @@
         maxZoom: 18,
         minZoom: 11
     });
-
-    map.remove();
 
     var map = L.map('map', {
         center: [1.32073, 103.910827],
@@ -995,30 +997,31 @@
     });
 
     function assignToUser() {
-        var selectedMarker = document.getElementById('inputMarker')
-        var selectedLine = document.getElementById('inputLine')
+      removeOptions(document.getElementById("inputMarker"));
+      removeOptions(document.getElementById("inputLine"));
+      var selectedMarker = document.getElementById('inputMarker')
+      var selectedLine = document.getElementById('inputLine')
 
-        if (selectedMarker.value != null) {
-            var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
-            query.once("value")
-                .then(function(snapshot) {
-                    var nameM = snapshot.child(selectedMarker.value + "/name").val();
-                    console.log(nameM)
-                    var descriptionM = snapshot.child(selectedMarker.value + "/description").val();
-                    var extraInfoM = snapshot.child(selectedMarker.value + "/extraInfo").val();
-                    var timeEditedM = snapshot.child(selectedMarker.value + "/timeEdited").val();
-                    var mapLayerM = snapshot.child(selectedMarker.value + "/mapLayer").val();
+      if (selectedMarker.value != null) {
+          var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
+          query.once("value")
+              .then(function(snapshot) {
+                  var nameM = snapshot.child(selectedMarker.value + "/name").val();
+                  var descriptionM = snapshot.child(selectedMarker.value + "/description").val();
+                  var extraInfoM = snapshot.child(selectedMarker.value + "/extraInfo").val();
+                  var timeEditedM = snapshot.child(selectedMarker.value + "/timeEdited").val();
+                  var mapLayerM = snapshot.child(selectedMarker.value + "/mapLayer").val();
 
-                    for (i = 0; i < selected.length; i++) {
-                        firebase.database().ref('Users/' + selected[i] + '/Markers/' + nameM).set({
-                            mapLayer: mapLayerM,
-                            timeEdited: timeEditedM,
-                            name: nameM,
-                            description: descriptionM,
-                            extraInfo: extraInfoM
-                        });
-                    }
-                })
+                  for (i = 0; i < selected.length; i++) {
+                      firebase.database().ref('Users/' + selected[i] + '/Markers/' + nameM).set({
+                          mapLayer: mapLayerM,
+                          timeEdited: timeEditedM,
+                          name: nameM,
+                          description: descriptionM,
+                          extraInfo: extraInfoM
+                      });
+                  }
+              })
             toastr.success('Successfully saved markers to database!', 'Success!', {
                 timeOut: 2000
             });
@@ -1054,12 +1057,13 @@
     function populateJSONData() {
         //Deleting all entries from dropdown
         removeOptions(document.getElementById("editJSONselectM"));
-        var select = document.getElementById("editJSONselectM");
-        select.options[select.options.length] = new Option('NIL', 'NIL');
-
         removeOptions(document.getElementById("editJSONselectL"));
+
+        var select = document.getElementById("editJSONselectM");
+        select.options[select.options.length] = new Option('Nothing selected', 'NIL');
+
         var select = document.getElementById("editJSONselectL");
-        select.options[select.options.length] = new Option('NIL', 'NIL');
+        select.options[select.options.length] = new Option('Nothing selected', 'NIL');
 
         var sel = document.getElementById('editJSONselectM');
         var sel1 = document.getElementById('editJSONselectL');
@@ -1139,6 +1143,28 @@
       var json = editor.get();
       alert(JSON.stringify(json, null, 2));
     }
-</script>
 
+    $('#editJSONselectM').on('changed.bs.select', function (e) {
+      var layerSelectedM = document.getElementById("editJSONselectM");
+      var selectedTextM1 = layerSelectedM.options[layerSelectedM.selectedIndex].text;
+
+      console.log(layerSelectedM.value)
+      if(selectedTextM1 != "Nothing selected") {
+        $('#editJSONselectL').prop('disabled', true);
+      } else {
+        $('#editJSONselectL').prop('disabled', false);
+      }
+    });
+
+    $('#editJSONselectL').on('changed.bs.select', function (e) {
+      var layerSelectedL = document.getElementById("editJSONselectL");
+      var selectedTextL1 = layerSelectedL.options[layerSelectedL.selectedIndex].text;
+
+      if(selectedTextL1 != "Nothing selected") {
+        $('#editJSONselectM').prop('disabled', true);
+      } else {
+        $('#editJSONselectM').prop('disabled', false);
+      }
+    });
+</script>
 </html>
