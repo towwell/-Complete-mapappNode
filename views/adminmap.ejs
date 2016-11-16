@@ -9,10 +9,6 @@
     <!-- jquery -->
     <script src="/javascripts/jquery-3.1.1.min.js"></script>
 
-    <!-- mapbox gl -->
-    <script src='/javascripts/mapbox-gl.js'></script>
-    <link rel='stylesheet' href='/stylesheets/mapbox-gl.css' />
-
     <!-- leaflet -->
     <link rel="stylesheet" href="/stylesheets/leaflet.css" />
     <script src="/javascripts/leaflet.js"></script>
@@ -567,8 +563,6 @@
 
         if (type === 'marker') {
             layer.addTo(drawnItems)
-            var test = prompt('Enter extra info of point', 'WIP Please Cancel')
-                // Do marker specific actions
         }
         if (type === 'polyline') {
             layer.addTo(drawnLines)
@@ -722,7 +716,6 @@
         var pointsFileName = prompt("File name for Points JSON file.");
         if (pointsFileName != null) {
             var drawnItemsJson = drawnItems.toGeoJSON();
-            console.log(drawnItemsJson);
             var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnItemsJson));
             var dlAnchorElem = document.getElementById('downloadPoints');
             dlAnchorElem.setAttribute("href", dataStr);
@@ -740,7 +733,6 @@
         var linesFileName = prompt("File name for Lines JSON file.");
         if (linesFileName != null) {
             var drawnLinesJson = drawnLines.toGeoJSON();
-            console.log(drawnLinesJson);
             var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(drawnLinesJson));
             var dlAnchorElem = document.getElementById('downloadLines');
             dlAnchorElem.setAttribute("href", dataStr);
@@ -773,7 +765,6 @@
     //Write custom markers to database
     //
     function writeMarkerData() {
-        console.log(document.getElementById('nameInputM').value)
         if (checkforDuplicates(document.getElementById('nameInputM').value)) {
             // alert("Firebase already has map layer of that name. Input another name instead")
             toastr.error('Invalid name.', 'Storage into data base cancelled', {
@@ -850,10 +841,8 @@
                 snapshot.forEach(function(childSnapshot) {
                     // key will be "ada" the first time and "alan" the second time
                     var key = childSnapshot.key;
-                    console.log(key)
                         // childData will be the actual contents of the child
                     var childData = childSnapshot.val();
-                    console.log(childData.mapLayer)
                     jsonlayer = L.geoJson(childData.mapLayer, {
                         onEachFeature: function(feature, layer) {
                             layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
@@ -874,10 +863,8 @@
                 snapshot.forEach(function(childSnapshot) {
                     // key will be layer name
                     var key = childSnapshot.key;
-                    console.log(key)
-                        // childData will be the actual contents of the child (GeoJSON)
+                    // childData will be the actual contents of the child (GeoJSON)
                     var childData = childSnapshot.val();
-                    console.log(childData.mapLayer)
                     jsonlayer = L.geoJson(childData.mapLayer, {
                         onEachFeature: function(feature, layer) {
                             layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
@@ -912,7 +899,6 @@
 
         var sel = document.getElementById('selectMarker');
         for (var i = 0; i < layerMarker.length; i++) {
-            console.log(layerMarker[i])
             var opt = document.createElement('option');
             opt.innerHTML = layerMarker[i];
             opt.value = layerMarker[i];
@@ -920,7 +906,6 @@
         }
         var sel = document.getElementById('selectLine');
         for (var i = 0; i < layerLine.length; i++) {
-            console.log(layerLine[i])
             var opt = document.createElement('option');
             opt.innerHTML = layerLine[i];
             opt.value = layerLine[i];
@@ -958,32 +943,26 @@
         var selectedTextM = layerSelected.options[layerSelected.selectedIndex].text;
         var layerSelected = document.getElementById("selectLine");
         var selectedTextL = layerSelected.options[layerSelected.selectedIndex].text;
-        console.log(selectedTextM);
-        console.log(selectedTextL);
         if (selectedTextM != 'NIL') {
             var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/" + selectedTextM);
             query.remove().then(function() {
-                    console.log("Remove successful")
                     toastr.success('Successfully removed layer ' + selectedTextM + ' from <%= user.username %>', 'Success!', {
                         timeOut: 4000
                     });
                     window.location.reload();
                 })
                 .catch(function(error) {
-                    console.log("Remove failed: " + error.message)
                 })
         }
         if (selectedTextL != 'NIL') {
             var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/" + selectedTextL);
             query.remove().then(function() {
-                    console.log("Remove successful")
                     toastr.success('Successfully removed layer ' + selectedTextL + ' from <%= user.username %>', 'Success!', {
                         timeOut: 4000
                     });
                     window.location.reload();
                 })
                 .catch(function(error) {
-                    console.log("Remove failed: " + error.message)
                 })
         }
     }
@@ -1033,7 +1012,6 @@
             query.once("value")
                 .then(function(snapshot) {
                     var nameL = snapshot.child(selectedMarker.value + "/name").val();
-                    console.log(nameL)
                     var descriptionL = snapshot.child(selectedMarker.value + "/description").val();
                     var extraInfoL = snapshot.child(selectedMarker.value + "/extraInfo").val();
                     var timeEditedL = snapshot.child(selectedMarker.value + "/timeEdited").val();
@@ -1094,7 +1072,6 @@
       var json = editor.get();
 
       var layer = prompt("Please enter your new layer name", "Map Layer");
-      console.log(layer)
       if (layer != null) {
         var updatedObj = {};
         updatedObj[layer] = json;
@@ -1122,13 +1099,10 @@
       var layerSelectedM = document.getElementById("editJSONselectM");
       var selectedTextM1 = layerSelectedM.options[layerSelectedM.selectedIndex].text;
 
-      console.log(layerSelectedM.value)
-
       var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
                 query.once("value")
                     .then(function(snapshot) {
                         var markerJSON = snapshot.child(layerSelectedM.value).val();
-                        console.log(markerJSON)
                         editor.set(markerJSON)
                         type = "Markers"
                         name = snapshot.child(layerSelectedM.value + "/name").val();
@@ -1151,7 +1125,6 @@
                 query.once("value")
                     .then(function(snapshot) {
                         var LineJSON = snapshot.child(layerSelectedL.value).val();
-                        console.log(LineJSON)
                         editor.set(LineJSON)
                         type = "Lines"
                         name = snapshot.child(layerSelectedL.value + "/name").val();

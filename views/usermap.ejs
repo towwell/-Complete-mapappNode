@@ -8,10 +8,6 @@
   <!-- jquery -->
   <script src="/javascripts/jquery-3.1.1.min.js"></script>
 
-  <!-- mapbox gl -->
-  <script src='/javascripts/mapbox-gl.js'></script>
-  <link  rel='stylesheet' href='/stylesheets/mapbox-gl.css'/>
-
   <!-- leaflet -->
   <link rel="stylesheet" href="/stylesheets/leaflet.css"/>
   <script src="/javascripts/leaflet.js"></script>
@@ -94,9 +90,6 @@
 
   <!-- map div -->
   <div id='map'></div>
-
-  <!-- Init map JS last after "map" div -->
-  <script src="/javascripts/adminmap.js"></script>
 </body>
 <script>
 
@@ -143,8 +136,6 @@
 						maxZoom: 18,
             minZoom: 11
 	});
-
-  map.remove();
 
   var map = L.map('map', {
     center: [1.32073, 103.910827],
