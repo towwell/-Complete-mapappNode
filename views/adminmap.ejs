@@ -72,7 +72,6 @@
     <script src="/javascripts/jsoneditor.min.js"></script>
 
     <script>
-   
     /////////////////////////////////////////////////////////////
     // INIT FIREBASE
     /////////////////////////////////////////////////////////////
@@ -83,7 +82,7 @@
             storageBucket: "awesome-93639.appspot.com",
             messagingSenderId: "900291118172"
         };
-         
+
         firebase.initializeApp(config);
         var database = firebase.database();
 
@@ -111,12 +110,11 @@
                         layerLine.push(key)
                     })
                 })
-                toastr.info('Initializing map application', 'Loading...', { timeOut: 6000 });       
+                toastr.info('Initializing map application', 'Loading...', { timeOut: 6000 });
         }
 
         window.onload = updateDeleteLayer;
     </script>
-
 </head>
 
 <body>
@@ -400,7 +398,7 @@
                                         // create the editor
                                         var container = document.getElementById("jsoneditor");
                                         var options = {
-                                          mode: 'tree',
+                                          mode: 'form',
                                           modes: ['code', 'form', 'text', 'tree', 'view']
                                         };
                                         var editor = new JSONEditor(container, options);
