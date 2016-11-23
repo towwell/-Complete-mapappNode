@@ -1,9 +1,9 @@
 // config/database.js
 module.exports = {
     'connection': {
-        'host': '188.166.244.116',
-        'user': 'root',
-        'password': 'password'
+        'host': '',
+        'user': '',
+        'password': ''
     },
 	'database': 'mapApp',
     'users_table': 'users'
