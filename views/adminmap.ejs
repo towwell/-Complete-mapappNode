@@ -68,9 +68,9 @@
     <script src="/javascripts/jsoneditor.min.js"></script>
 
     <script>
-    /////////////////////////////////////////////////////////////
-    // INIT FIREBASE
-    /////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////
+        // INIT FIREBASE
+        /////////////////////////////////////////////////////////////
         var config = {
             apiKey: "AIzaSyBidD56QDaYhdtyNGS-rWhSzSfmzIWSmNk",
             authDomain: "awesome-93639.firebaseapp.com",
@@ -106,7 +106,9 @@
                         layerLine.push(key)
                     })
                 })
-                toastr.info('Initializing map application', 'Loading...', { timeOut: 6000 });
+            toastr.info('Initializing map application', 'Loading...', {
+                timeOut: 4000
+            });
         }
 
         window.onload = updateDeleteLayer;
@@ -266,7 +268,7 @@
                         </div>
                     </li>
                     <!--Retrieve from firebase -->
-                    <li class="navbarStyle"><a class="btn btn-info" data-target="#retrieveModal" data-toggle="modal" id="navbarStyle">Load Online Layers</a></li>
+                    <li class="navbarStyle"><a class="btn btn-info" data-target="#retrieveModal" data-toggle="modal" id="navbarStyle" onclick="populateOnline()">Load Online Layers</a></li>
                     <!-- Hidden Modal -->
                     <div class="modal fade" id="retrieveModal">
                         <div class="modal-dialog">
@@ -276,11 +278,25 @@
                                     <h4 class="modal-title">Retrieve from online database?</h4>
                                 </div>
                                 <div class="modal-body" id="modalbody">
-                                    <h5>It will take a few minutes to import all layers from <b><%= user.username %></b> online account </h5>
+                                    <form class="form-horizontal">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label for="loadMarker" class="col-lg-2 control-label">Markers</label>
+                                                <select class="selectpicker" id="loadMarker">
+                                        </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="loadLine" class="col-lg-2 control-label">Lines</label>
+                                                <select class="selectpicker" id="loadLine">
+                                        </select>
+                                            </div>
+                                        </fieldset>
+                                    </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                    <a type="button" class="btn btn-info" data-dismiss="modal" onclick="retrieveUserData()">Retrieve</a>
+                                    <a type="button" id="retrieveAllBtn" class="btn btn-info" data-dismiss="modal" onclick="retrieveUserData()">Retrieve all layers</a>
+                                    <a type="button" class="btn btn-info" data-dismiss="modal" onclick="retrieveOnlineData()">Retrieve selected</a>
                                 </div>
                             </div>
                         </div>
@@ -375,27 +391,27 @@
                                     <h4 class="modal-title">Change firebase JSON data</h4>
                                 </div>
                                 <div class="modal-body" id="modalbody">
-                                  <form class="form-horizontal">
-                                      <fieldset>
-                                        <div class="form-group">
-                                            <label for="editJSONselectM" class="col-lg-2 control-label">Markers</label>
-                                            <select id="editJSONselectM" class="selectpicker" data-divider="true" data-live-search="true" data-size="5">
+                                    <form class="form-horizontal">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label for="editJSONselectM" class="col-lg-2 control-label">Markers</label>
+                                                <select id="editJSONselectM" class="selectpicker" data-divider="true" data-live-search="true" data-size="5">
                                             </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="editJSONselectL" class="col-lg-2 control-label">Lines</label>
-                                            <select id="editJSONselectL" class="selectpicker" data-divider="true" data-live-search="true" data-size="5">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="editJSONselectL" class="col-lg-2 control-label">Lines</label>
+                                                <select id="editJSONselectL" class="selectpicker" data-divider="true" data-live-search="true" data-size="5">
                                             </select>
-                                        </div>
-                                      </fieldset>
+                                            </div>
+                                        </fieldset>
                                     </form>
                                     <div id="jsoneditor"></div>
                                     <script>
                                         // create the editor
                                         var container = document.getElementById("jsoneditor");
                                         var options = {
-                                          mode: 'form',
-                                          modes: ['code', 'form', 'text', 'tree', 'view']
+                                            mode: 'form',
+                                            modes: ['code', 'form', 'text', 'tree', 'view']
                                         };
                                         var editor = new JSONEditor(container, options);
 
@@ -428,14 +444,15 @@
                                 </div>
                                 <div class="modal-body" id="modalbody">
                                     <h5><i>Sources and References:</i></h5>
-                                    <h5><b>Leaflet</b></h5> 
+                                    <h5><b>Leaflet</b></h5>
                                     <h6>Map implementation and Draw features</h6>
                                     <h5><b>OneMap</b></h5>
                                     <h6>Basemap</h6>
                                     <h5><b>Stack Overflow</b></h5>
                                     <h6>Map testing and bug fixing</h6>
                                     <h5><b>Firebase</b></h5>
-                                    <h6>Online database for layer storage</h6></br>
+                                    <h6>Online database for layer storage</h6>
+                                    </br>
                                     <h4>Map based FYP Project</h4>
                                     <h5>By Irfan Iskandar (141892X) , Foong Jun Hui (142855L)</h5>
 
@@ -869,7 +886,7 @@
                 snapshot.forEach(function(childSnapshot) {
                     // key will be "ada" the first time and "alan" the second time
                     var key = childSnapshot.key;
-                        // childData will be the actual contents of the child
+                    // childData will be the actual contents of the child
                     var childData = childSnapshot.val();
                     jsonlayer = L.geoJson(childData.mapLayer, {
                         onEachFeature: function(feature, layer) {
@@ -941,6 +958,33 @@
         }
     }
 
+    function populateOnline() {
+        //Deleting all entries from dropdown
+        removeOptions(document.getElementById("loadMarker"));
+        var select = document.getElementById("loadMarker");
+        select.options[select.options.length] = new Option('NIL', 'NIL');
+
+        removeOptions(document.getElementById("loadLine"));
+        var select = document.getElementById("loadLine");
+        select.options[select.options.length] = new Option('NIL', 'NIL');
+
+        var sel = document.getElementById('loadMarker');
+        for (var i = 0; i < layerMarker.length; i++) {
+            var opt = document.createElement('option');
+            opt.innerHTML = layerMarker[i];
+            opt.value = layerMarker[i];
+            sel.appendChild(opt);
+        }
+        var sel = document.getElementById('loadLine');
+        for (var i = 0; i < layerLine.length; i++) {
+            var opt = document.createElement('option');
+            opt.innerHTML = layerLine[i];
+            opt.value = layerLine[i];
+            sel.appendChild(opt);
+        }
+        $('.selectpicker').selectpicker('refresh');
+    }
+
     function populateSaveUserSelect() {
 
         //Deleting all entries from dropdown
@@ -966,6 +1010,65 @@
         $('.selectpicker').selectpicker('refresh');
     }
 
+    //Retrieve markers from database
+    //
+    function retrieveOnlineData() {
+        var layerSelected = document.getElementById("loadMarker");
+        var selectedTextM = layerSelected.options[layerSelected.selectedIndex].text;
+        var layerSelected = document.getElementById("loadLine");
+        var selectedTextL = layerSelected.options[layerSelected.selectedIndex].text;
+
+        if (selectedTextM != 'NIL') {
+            var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
+            query.once("value")
+                .then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        // key will be "ada" the first time and "alan" the second time
+                        var key = childSnapshot.key;
+                        // childData will be the actual contents of the child
+                        var childData = childSnapshot.val();
+                        jsonlayer = L.geoJson(childData.mapLayer, {
+                            onEachFeature: function(feature, layer) {
+                                layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</div>');
+                                //
+                            }
+                        });
+                        //save points as clusters to reduce lag
+                        var markersJSON = L.markerClusterGroup();
+                        markersJSON.addLayer(jsonlayer);
+                        map.addLayer(markersJSON);
+
+                        lcontrol.addOverlay(markersJSON, key);
+                    });
+                });
+            toastr.success('Successfully retrieved selected marker layer linked with account <%= user.username %>', 'Success!', {
+                timeOut: 2000
+            });
+        }
+        if (selectedTextL != 'NIL') {
+            var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/");
+            query.once("value")
+                .then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        // key will be layer name
+                        var key = childSnapshot.key;
+                        // childData will be the actual contents of the child (GeoJSON)
+                        var childData = childSnapshot.val();
+                        jsonlayer = L.geoJson(childData.mapLayer, {
+                            onEachFeature: function(feature, layer) {
+                                layer.bindPopup('<div>Layer Name: <b>' + childData.name + '</b></br>Description: ' + childData.description + '</br>Extra information: ' + childData.extraInfo + '</br>Date Edited: ' + childData.timeEdited + '</div>');
+                            }
+                        });
+                        lcontrol.addOverlay(jsonlayer, key);
+                    });
+                });
+            toastr.success('Successfully retrieved selected marker layer linked with account <%= user.username %>', 'Success!', {
+                timeOut: 2000
+            });
+        }
+
+    }
+
     function deleteLayerOnline() {
         var layerSelected = document.getElementById("selectMarker");
         var selectedTextM = layerSelected.options[layerSelected.selectedIndex].text;
@@ -979,8 +1082,7 @@
                     });
                     window.location.reload();
                 })
-                .catch(function(error) {
-                })
+                .catch(function(error) {})
         }
         if (selectedTextL != 'NIL') {
             var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/" + selectedTextL);
@@ -990,8 +1092,7 @@
                     });
                     window.location.reload();
                 })
-                .catch(function(error) {
-                })
+                .catch(function(error) {})
         }
     }
     var selected = [];
@@ -1005,31 +1106,31 @@
     });
 
     function assignToUser() {
-      removeOptions(document.getElementById("inputMarker"));
-      removeOptions(document.getElementById("inputLine"));
-      var selectedMarker = document.getElementById('inputMarker')
-      var selectedLine = document.getElementById('inputLine')
+        removeOptions(document.getElementById("inputMarker"));
+        removeOptions(document.getElementById("inputLine"));
+        var selectedMarker = document.getElementById('inputMarker')
+        var selectedLine = document.getElementById('inputLine')
 
-      if (selectedMarker.value != null) {
-          var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
-          query.once("value")
-              .then(function(snapshot) {
-                  var nameM = snapshot.child(selectedMarker.value + "/name").val();
-                  var descriptionM = snapshot.child(selectedMarker.value + "/description").val();
-                  var extraInfoM = snapshot.child(selectedMarker.value + "/extraInfo").val();
-                  var timeEditedM = snapshot.child(selectedMarker.value + "/timeEdited").val();
-                  var mapLayerM = snapshot.child(selectedMarker.value + "/mapLayer").val();
+        if (selectedMarker.value != null) {
+            var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
+            query.once("value")
+                .then(function(snapshot) {
+                    var nameM = snapshot.child(selectedMarker.value + "/name").val();
+                    var descriptionM = snapshot.child(selectedMarker.value + "/description").val();
+                    var extraInfoM = snapshot.child(selectedMarker.value + "/extraInfo").val();
+                    var timeEditedM = snapshot.child(selectedMarker.value + "/timeEdited").val();
+                    var mapLayerM = snapshot.child(selectedMarker.value + "/mapLayer").val();
 
-                  for (i = 0; i < selected.length; i++) {
-                      firebase.database().ref('Users/' + selected[i] + '/Markers/' + nameM).set({
-                          mapLayer: mapLayerM,
-                          timeEdited: timeEditedM,
-                          name: nameM,
-                          description: descriptionM,
-                          extraInfo: extraInfoM
-                      });
-                  }
-              })
+                    for (i = 0; i < selected.length; i++) {
+                        firebase.database().ref('Users/' + selected[i] + '/Markers/' + nameM).set({
+                            mapLayer: mapLayerM,
+                            timeEdited: timeEditedM,
+                            name: nameM,
+                            description: descriptionM,
+                            extraInfo: extraInfoM
+                        });
+                    }
+                })
             toastr.success('Successfully saved markers to database!', 'Success!', {
                 timeOut: 2000
             });
@@ -1096,75 +1197,98 @@
 
     //Able to update JSON under new name
     //
-    function editJSONNew(){
-      var json = editor.get();
+    function editJSONNew() {
+        var json = editor.get();
 
-      var layer = prompt("Please enter your new layer name", "Map Layer");
-      if (layer != null) {
-        var updatedObj = {};
-        updatedObj[layer] = json;
-        firebase.database().ref('Users/' + <%= user.id %> + '/' + type + "/").update(
-               updatedObj
+        var layer = prompt("Please enter your new layer name", "Map Layer");
+        if (layer != null) {
+            var updatedObj = {};
+            updatedObj[layer] = json;
+            firebase.database().ref('Users/' + <%= user.id %> + '/' + type + "/").update(
+                updatedObj
             );
-      }
-      location.reload();
+        }
+        location.reload();
     }
     //Able to update JSON under same name
     //
-    function editJSONOverride(){
-      var json = editor.get();
+    function editJSONOverride() {
+        var json = editor.get();
 
-      var updatedObj = {};
+        var updatedObj = {};
         updatedObj[name] = json;
         firebase.database().ref('Users/' + <%= user.id %> + '/' + type + "/").update(
-               updatedObj
-            );
+            updatedObj
+        );
     }
 
     //JSON Editor updates on selected layer
     //
-    $('#editJSONselectM').on('changed.bs.select', function (e) {
-      var layerSelectedM = document.getElementById("editJSONselectM");
-      var selectedTextM1 = layerSelectedM.options[layerSelectedM.selectedIndex].text;
+    $('#editJSONselectM').on('changed.bs.select', function(e) {
+        var layerSelectedM = document.getElementById("editJSONselectM");
+        var selectedTextM1 = layerSelectedM.options[layerSelectedM.selectedIndex].text;
 
-      var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
-                query.once("value")
-                    .then(function(snapshot) {
-                        var markerJSON = snapshot.child(layerSelectedM.value).val();
-                        editor.set(markerJSON)
-                        type = "Markers"
-                        name = snapshot.child(layerSelectedM.value + "/name").val();
-                    })
+        var query = firebase.database().ref("Users/" + <%= user.id %> + "/Markers/");
+        query.once("value")
+            .then(function(snapshot) {
+                var markerJSON = snapshot.child(layerSelectedM.value).val();
+                editor.set(markerJSON)
+                type = "Markers"
+                name = snapshot.child(layerSelectedM.value + "/name").val();
+            })
 
-      if(selectedTextM1 != "Nothing selected") {
-        $('#editJSONselectL').prop('disabled', true);
-        $('#editJSONselectL').selectpicker('refresh');
-      } else {
-        $('#editJSONselectL').prop('disabled', false);
-        $('#editJSONselectL').selectpicker('refresh');
-      }
+        if (selectedTextM1 != "Nothing selected") {
+            $('#editJSONselectL').prop('disabled', true);
+            $('#editJSONselectL').selectpicker('refresh');
+        } else {
+            $('#editJSONselectL').prop('disabled', false);
+            $('#editJSONselectL').selectpicker('refresh');
+        }
     });
 
-    $('#editJSONselectL').on('changed.bs.select', function (e) {
-      var layerSelectedL = document.getElementById("editJSONselectL");
-      var selectedTextL1 = layerSelectedL.options[layerSelectedL.selectedIndex].text;
+    $('#editJSONselectL').on('changed.bs.select', function(e) {
+        var layerSelectedL = document.getElementById("editJSONselectL");
+        var selectedTextL1 = layerSelectedL.options[layerSelectedL.selectedIndex].text;
 
-      var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/");
-                query.once("value")
-                    .then(function(snapshot) {
-                        var LineJSON = snapshot.child(layerSelectedL.value).val();
-                        editor.set(LineJSON)
-                        type = "Lines"
-                        name = snapshot.child(layerSelectedL.value + "/name").val();
-                    })
+        var query = firebase.database().ref("Users/" + <%= user.id %> + "/Lines/");
+        query.once("value")
+            .then(function(snapshot) {
+                var LineJSON = snapshot.child(layerSelectedL.value).val();
+                editor.set(LineJSON)
+                type = "Lines"
+                name = snapshot.child(layerSelectedL.value + "/name").val();
+            })
 
-      if(selectedTextL1 != "Nothing selected") {
-        $('#editJSONselectM').prop('disabled',true);
-        $('#editJSONselectM').selectpicker('refresh');
-      } else {
-        $('#editJSONselectM').prop('disabled',false);
-        $('#editJSONselectM').selectpicker('refresh');
-      }
+        if (selectedTextL1 != "Nothing selected") {
+            $('#editJSONselectM').prop('disabled', true);
+            $('#editJSONselectM').selectpicker('refresh');
+        } else {
+            $('#editJSONselectM').prop('disabled', false);
+            $('#editJSONselectM').selectpicker('refresh');
+        }
+    });
+
+    $('#loadMarker').on('changed.bs.select', function(e) {
+        var layerSelectedM = document.getElementById("loadMarker");
+        var selectedTextM = layerSelectedM.options[layerSelectedM.selectedIndex].text;
+
+        if (selectedTextM != "NIL") {
+            $('#retrieveAllBtn').hide()
+        } else {
+            $('#retrieveAllBtn').show()
+        }
+    });
+
+    $('#loadLine').on('changed.bs.select', function(e) {
+        var layerSelectedL = document.getElementById("loadLine");
+        var selectedTextL = layerSelectedL.options[layerSelectedL.selectedIndex].text;
+
+        if (selectedTextL != "NIL") {
+            $('#retrieveAllBtn').hide()
+        } else {
+            $('#retrieveAllBtn').show()
+        }
     });
 </script>
+
 </html>
